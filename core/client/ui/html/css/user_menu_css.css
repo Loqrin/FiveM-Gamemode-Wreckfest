@@ -1,0 +1,68 @@
+@font-face 
+{
+    font-family: ChaletLondonNineteenSixty;
+    src: url("../fonts/ChaletLondonNineteenSixty.ttf");
+}
+
+#user_menu_container
+{
+    width: 400px;
+
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+#user_menu_container hr
+{
+    margin: 0px;
+
+    color: white;
+}
+
+#user_menu_title
+{
+    margin: 0px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+
+    font-family: ChaletLondonNineteenSixty;
+    color: white;
+}
+
+#user_menu_list
+{
+    margin: 0px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+
+    width: 360px;
+
+    font-family: ChaletLondonNineteenSixty;
+    color: white;
+
+    list-style-type: none;
+    text-align: left;
+    line-height: 28px;
+}
+
+#user_menu_item
+{
+    height: 30px;
+    padding-left: 10px;
+}
+
+#user_menu_item:nth-child(odd)
+{
+    background-color: rgba(20, 20, 20, 0.8);
+}
+
+#user_menu_item:nth-child(even)
+{
+    background-color: rgba(10, 10, 10, 0);
+}
+
+.user_menu_selected_item
+{
+    color: rgb(255, 208, 0);
+}

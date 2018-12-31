@@ -1,0 +1,187 @@
+@font-face 
+{
+    font-family: ChaletLondonNineteenSixty;
+    src: url("../fonts/ChaletLondonNineteenSixty.ttf");
+}
+
+#welcome_menu_container
+{
+    margin: 0px;
+
+    position: absolute;
+    top: 0px;
+    left: 0px;
+
+    width: 100%;
+    height: 100%;
+}
+
+#welcome_menu_topbar
+{
+    position: absolute;
+    top: 0%;
+    left: 50%;
+
+    transform: translate(-50%, 0%);
+
+    background-color: rgba(0, 0, 0, 0.8);
+
+    width: 100%;
+    height: 100px;
+}
+
+#welcome_menu_topbar h1
+{
+    position: absolute;
+    top: 10%;
+    left: 3%;
+
+    transform: translate(-3%, -10%);
+
+    font-family: ChaletLondonNineteenSixty;
+    color: white;
+}
+
+#welcome_menu_bottombar
+{
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
+
+    transform: translate(-50%, 0%);
+
+    background-color: rgba(0, 0, 0, 0.8);
+
+    width: 100%;
+    height: 100px;
+}
+
+/*How to Play Button*/
+#welcome_menu_btn_how2play
+{
+	position: absolute;
+    top: 50%;
+    right: 10%;
+    
+    transform: translate(-10%, -50%);
+    
+	padding: 0.5vw;
+
+	border: 5px solid white;
+	background-color: Transparent;
+	outline: none;
+
+	font-family: ChaletLondonNineteenSixty;
+	font-size: 2.8vh;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+
+	transition: all 0.2s;
+}
+
+#welcome_menu_btn_how2play span 
+{
+    position: relative;
+
+    transition: 0.2s;
+}
+
+#welcome_menu_btn_how2play span:after 
+{
+    position: absolute;
+    top: 0;
+    right: -20px;
+
+	content: '\00bb';
+    opacity: 0;
+    
+    transition: 0.2s;
+}
+
+#welcome_menu_btn_how2play:hover span 
+{
+    padding-right: 25px;
+}
+
+#welcome_menu_btn_how2play:hover span:after 
+{
+	right: 0;
+    opacity: 1;
+}
+
+#welcome_menu_btn_how2play:active
+{
+    background-color: rgba(255, 203, 77, 1);
+    transition: background-color 0.1s;
+}
+
+#welcome_menu_btn_how2play:hover
+{
+    border-color: rgb(255, 203, 77);
+}
+
+/*Spawn Button*/
+#welcome_menu_btn_spawn
+{
+	position: absolute;
+    top: 50%;
+    right: 3%;
+    
+    transform: translate(-3%, -50%);
+    
+	padding: 0.5vw;
+
+	border: 5px solid white;
+	background-color: Transparent;
+	outline: none;
+
+	font-family: ChaletLondonNineteenSixty;
+	font-size: 2.8vh;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+
+	transition: all 0.2s;
+}
+
+#welcome_menu_btn_spawn span 
+{
+    position: relative;
+
+    transition: 0.2s;
+}
+
+#welcome_menu_btn_spawn span:after 
+{
+    position: absolute;
+    top: 0;
+    right: -20px;
+
+	content: '\00bb';
+    opacity: 0;
+    
+    transition: 0.2s;
+}
+
+#welcome_menu_btn_spawn:hover span 
+{
+    padding-right: 25px;
+}
+
+#welcome_menu_btn_spawn:hover span:after 
+{
+	right: 0;
+    opacity: 1;
+}
+
+#welcome_menu_btn_spawn:active
+{
+    background-color: rgba(255, 203, 77, 1);
+    transition: background-color 0.1s;
+}
+
+#welcome_menu_btn_spawn:hover
+{
+    border-color: rgb(255, 203, 77);
+}

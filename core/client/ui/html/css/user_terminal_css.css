@@ -1,0 +1,192 @@
+@font-face 
+{
+    font-family: ChaletLondonNineteenSixty;
+    src: url("../fonts/ChaletLondonNineteenSixty.ttf");
+}
+
+#user_terminal_container
+{
+    margin: 0px;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    background-color: rgba(0, 0, 0, 0.8);
+
+    width: 800px;
+    height: 500px;
+}
+
+#user_terminal_titlebar
+{
+    background-color: rgba(0, 0, 0, 0.8);
+
+    width: 100%;
+    height: 25px;
+}
+
+#user_terminal_titlebar span
+{
+    position: relative;
+    top: 3px;
+    left: 5px;
+
+    font-family: ChaletLondonNineteenSixty;
+    font-size: 12pt;
+    color: white;
+}
+
+#user_terminal_exit_btn
+{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+
+    border: none;
+    outline: none;
+    background-color: transparent;
+
+    font-family: ChaletLondonNineteenSixty;
+    font-size: 12pt;
+    color: white;
+
+    cursor: pointer;
+
+    width: 25px;
+    height: 25px;
+
+    transition: all 0.1s;
+}
+
+#user_terminal_exit_btn:hover
+{
+    color: rgba(255, 203, 77, 1);
+    transition: color 0.1s;
+}
+
+#user_terminal_nav_heading
+{
+    background-color: rgba(0, 0, 0, 0.8);
+
+    font-family: ChaletLondonNineteenSixty;
+    font-size: 20pt;
+    color: white;
+
+    padding-left: 41px;
+    padding-right: 40px;
+}
+
+#user_terminal_nav
+{
+    margin: 0px;
+
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    background-color: rgba(0, 0, 0, 0.8);
+
+    font-family: ChaletLondonNineteenSixty;
+    color: white;
+
+    list-style-type: none;
+    text-align: left;
+    line-height: 28px;
+
+    width: 170px;
+    height: 431px;
+    max-height: 431px;
+
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+#user_terminal_nav li
+{
+    padding-left: 10px;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+#user_terminal_nav li:nth-child(odd)
+{
+    background-color: rgba(30, 30, 30, 0.8);
+}
+
+#user_terminal_nav li:nth-child(even)
+{
+    background-color: rgba(20, 20, 20, 0.3);
+}
+
+#user_terminal_nav li:hover
+{
+    color: rgba(255, 203, 77, 1);
+    transition: color 0.1s;
+}
+
+#user_terminal_content_box
+{
+    position: absolute;
+    top: 80%;
+    right: 0.8%;
+
+    transform: translate(-0.8%, -80%);
+
+    word-wrap: break-word;
+
+    width: 590px;
+    height: 460px;
+
+    max-width: 590px;
+    max-height: 460px;
+
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+#user_terminal_content_box_h
+{
+    font-family: ChaletLondonNineteenSixty;
+    font-size: 20pt;
+    color: white;
+}
+
+#user_terminal_content_box img
+{
+    position: relative;
+    top: 0%;
+    left: 50%;
+
+    transform: translate(-50%, 0%);
+
+    border: 5px solid white;
+
+    max-width: 40%;
+    max-height: 40%;
+}
+
+#user_terminal_content_box span
+{
+    font-family: ChaletLondonNineteenSixty;
+    color: white;
+}
+
+::-webkit-scrollbar 
+{
+    width: 10px;
+}
+
+::-webkit-scrollbar-track 
+{
+    border: none;
+}
+
+::-webkit-scrollbar-thumb 
+{
+    background: rgba(255, 203, 77, 1);
+    border-radius: 10px;
+}
