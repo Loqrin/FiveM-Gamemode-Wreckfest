@@ -72,7 +72,7 @@ local function checkHealth(plySource, serverID, health, weapon, ownerSource)
     local allPlyers = GetPlayers()
     local newHealth = health
 
-    newHealth = newHealth - 5
+    newHealth = newHealth - 30
 
     print("[Wreckfest DEBUG] New health calculated: " .. newHealth)
 
