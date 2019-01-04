@@ -144,7 +144,7 @@ local function sellProp()
 end
 
 local function sellComplete(sellAmount)
-    if numOwnProps > 0 then
+    if currentVehicleServerID ~= nil then
         TriggerServerEvent("server_sync_player:saveVehicle", currentVehicleModel, currentVehicleServerID)
     end
     
