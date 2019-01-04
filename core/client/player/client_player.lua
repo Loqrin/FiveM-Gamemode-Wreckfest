@@ -130,6 +130,7 @@ Citizen.CreateThread(function()
                         plyersVehicles["" .. k].destroyed = true
                         
                         TriggerServerEvent("server_sync_player:updateScoreboard", GetPlayerName(PlayerId()), true, false)
+                        TriggerServerEvent("server_sync_player:payment")
 
                         break
                     end
@@ -201,4 +202,9 @@ RegisterNetEvent("client_player:clearScoreboard")
 AddEventHandler("client_player:clearScoreboard", function()
     scoreboardClear()
     TriggerServerEvent("server_sync_player:appendScoreboard", GetPlayerName(PlayerId()))
+end)
+
+RegisterNetEvent("client_player:paymentComplete")
+AddEventHandler("client_player:paymentComplete", function(paymentMoney)
+    DrawNotificationMinimap("Payment for killing: ~g~" .. paymentMoney, "[User Terminal]")
 end)

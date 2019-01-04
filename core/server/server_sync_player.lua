@@ -37,7 +37,7 @@ local isBuildTimerOn = false
 --local maxRoundTime = 600 --5min
 --local maxBuildTime = 180 --3min
 
-local maxRoundTime = 15
+local maxRoundTime = 600
 local maxBuildTime = 5
 
 --#[Local Functions]#--
@@ -461,6 +461,16 @@ local function clearScoreboard()
     end
 end
 
+local function plyPayment(plySource)
+    local plyID = GetPlayerIdentifiers(plySource)
+
+    plyersData["" .. plyID[1]].money = plyersData["" .. plyID[1]].money + paymentMoney --variable from config file config_server_player.lua
+
+    TriggerClientEvent("client_player:paymentComplete", plySource, paymentMoney)
+
+    saveUserData(plySource)
+end
+
 buildTimer(true)
 
 --#[Event Handlers]#--
@@ -517,4 +527,9 @@ end)
 RegisterServerEvent("server_sync_player:clearScoreboard")
 AddEventHandler("server_sync_player:clearScoreboard", function()
     clearScoreboard()
+end)
+
+RegisterServerEvent("server_sync_player:payment")
+AddEventHandler("server_sync_player:payment", function()
+    plyPayment(source)
 end)
