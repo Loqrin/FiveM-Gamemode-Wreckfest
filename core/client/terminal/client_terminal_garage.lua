@@ -19,6 +19,7 @@ local function setupGarageMenu()
     appendUserTerminalNavList("back", "Back", false)
     appendUserTerminalNavList("storeVehicle", "Store Vehicle", false)
     appendUserTerminalNavList("saveVehicle", "Save Vehicle", false)
+    appendUserTerminalNavList("sellAllProps", "Sell All Current Props/Weapons", false)
 
     for k, v in pairs(plyerData.vehicles) do --table from config file config_vehicles.lua
         for m, n in pairs(vehicles) do
@@ -109,6 +110,20 @@ local function saveVehicle()
     TriggerServerEvent("server_sync_player:saveVehicle", currentVehicleModel, currentVehicleServerID)
 end
 
+local function sellProp()
+    for k, v in pairs(ownProps) do
+        TriggerServerEvent("server_sync_player:sellProp", ownProps[k].localID, ownProps[k].model)
+
+        if ownAttachedProps[ownProps[k].serverID] ~= nil then
+            unsyncAttachment(ownProps[k].serverID)
+        end
+        
+        despawnProp(ownProps[k].serverID) --function from client script client_sync_props.lua
+
+        Citizen.Wait(500)
+    end
+end
+
 --#[Citizen Threads]#--
 Citizen.CreateThread(function()
     while true do
@@ -169,6 +184,14 @@ RegisterNUICallback("userTerminalNavClick", function(data, cb)
                     end
                 else
                     DrawNotificationMinimap("~r~No vehicle ~w~to save!", "[User Terminal]")
+                end
+            end
+
+            if data.key == "sellAllProps" then
+                if numOwnProps > 0 then
+                    sellProp()
+                else
+                    DrawNotificationMinimap("~r~No props/weapons ~w~to sell!", "[User Terminal]")
                 end
             end
 

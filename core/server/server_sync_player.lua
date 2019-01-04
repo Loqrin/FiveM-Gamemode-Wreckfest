@@ -260,19 +260,28 @@ local function sellProp(plySource, prop, model)
     local sellAmount = 0
 
     for k, v in pairs(spawnedProps["" .. plyID[1]]) do
+        local sellPrice = 0
+
+        if weapons[model] ~= nil then
+            sellPrice = weapons[model].price
+        else
+            sellPrice = props[model].price
+        end
+
         if spawnedProps["" .. plyID[1]][k].localID == prop then
-            sellAmount =  plyersData["" .. plyID[1]].money + (props[model].price * 0.4)
+            sellAmount =  plyersData["" .. plyID[1]].money + (sellPrice * 0.4)
 
             plyersData["" .. plyID[1]].money = sellAmount
 
             TriggerClientEvent("client_player:loadData", plySource, plyersData["" .. plyID[1]].money, plyersData["" .. plyID[1]].vehicles)
-            TriggerClientEvent("client_build_vehicle:sellComplete", plySource, (props[model].price * 0.4))
+            TriggerClientEvent("client_build_vehicle:sellComplete", plySource, (sellPrice * 0.4))
+
+            saveUserData(plySource)
 
             break
         end
     end
 end
-
 
 local function saveVehicle(plySource, hash, vehicleID)
     local plyID = GetPlayerIdentifiers(plySource)
@@ -295,6 +304,8 @@ local function saveVehicle(plySource, hash, vehicleID)
                         rotZ = attachedProps["" .. plyID[1]][k].rotZ
                     }
                 end
+
+                print("[Wreckfest DEBUG] Successfully saved vehicle " .. hash .. " with the ID of " .. vehicleID)
 
                 TriggerClientEvent("client_player:loadData", plySource, plyersData["" .. plyID[1]].money, plyersData["" .. plyID[1]].vehicles)
 
@@ -466,6 +477,7 @@ local function plyPayment(plySource)
 
     plyersData["" .. plyID[1]].money = plyersData["" .. plyID[1]].money + paymentMoney --variable from config file config_server_player.lua
 
+    TriggerClientEvent("client_player:loadData", plySource, plyersData["" .. plyID[1]].money, plyersData["" .. plyID[1]].vehicles)
     TriggerClientEvent("client_player:paymentComplete", plySource, paymentMoney)
 
     saveUserData(plySource)
@@ -532,4 +544,9 @@ end)
 RegisterServerEvent("server_sync_player:payment")
 AddEventHandler("server_sync_player:payment", function()
     plyPayment(source)
+end)
+
+RegisterServerEvent("server_sync_player:sellAllProps")
+AddEventHandler("server_sync_player:sellAllProps", function()
+    sellAllProps(source)
 end)
