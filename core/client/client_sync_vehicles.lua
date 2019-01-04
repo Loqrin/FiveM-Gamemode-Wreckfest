@@ -71,7 +71,8 @@ local function vehicleSync(plySource, serverID, pos, pos2)
                 {
                     plySource = plySource,
                     serverID = serverID,
-                    localID = entity
+                    localID = entity,
+                    destroyed = false
                 }
 
                 local plyPed = GetPlayerPed(GetPlayerFromServerId(plySource))
@@ -110,7 +111,8 @@ local function plyerJoined(plySource, serverID, pos, pos2)
         {
             plySource = plySource,
             serverID = serverID,
-            localID = plyVehicle
+            localID = plyVehicle,
+            destroyed = false
         }
 
         print("[Wreckfest DEBUG] Player is in vehicle, still managed to obtain vehicle: " .. plyVehicle .. " from player source: " .. plySource)
@@ -129,7 +131,8 @@ local function plyerJoined(plySource, serverID, pos, pos2)
                     {
                         plySource = plySource,
                         serverID = serverID,
-                        localID = entity
+                        localID = entity,
+                        destroyed = false
                     }
 
                     print("[Wreckfest DEBUG] Managed to obtain vehicle: " .. entity .. " from player source: " .. plySource)

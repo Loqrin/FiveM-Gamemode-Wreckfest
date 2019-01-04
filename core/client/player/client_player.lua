@@ -121,14 +121,20 @@ Citizen.CreateThread(function()
             end
         end
 
-        if aiming then
-            if IsEntityAPed(target) then
-                if IsPedAPlayer(target) then
-                    if IsPedDeadOrDying(target, 1) and deadPeds["" .. target] == nil then
-                        deadPeds["" .. target] = {entity = target}
+        for k, v in pairs(plyersVehicles) do --table from client script client_sync_vehicles.lua
+            local veh = plyersVehicles["" .. k].localID
 
+            if IsEntityAVehicle(veh) and not plyersVehicles["" .. k].destroyed then
+                if HasEntityBeenDamagedByWeapon(veh, 0, 2) then
+                    if GetVehicleEngineHealth(veh) <= 0 then
+                        plyersVehicles["" .. k].destroyed = true
+                        
                         TriggerServerEvent("server_sync_player:updateScoreboard", GetPlayerName(PlayerId()), true, false)
+
+                        break
                     end
+
+                    ClearEntityLastDamageEntity(veh)
                 end
             end
         end
