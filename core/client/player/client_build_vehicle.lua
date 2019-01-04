@@ -15,7 +15,7 @@ local raycastDistance = 5.0
 local toggleRotation = false
 
 local zoomAmount = 5.0
-local maxZoomAmount = 40.0
+local maxZoomAmount = 10.0
 local minZoomAmount = 1.0
 local incrementZoomAmount = 0.2
 
@@ -312,48 +312,52 @@ Citizen.CreateThread(function()
 
                 zoomControl()
                 
-                if entity == currentVehicle then
-                    SetEntityCoords(selectedProp, endCoords)
-
-                    Draw3DText(propPos.x, propPos.y, propPos.z + 1.0, "[~g~Prop Selected - ~g~Can Attach Prop~w~]~n~[Press ~y~" .. ConvertInstructBtnText(GetControlInstructionalButton(1, keys.Backspace, 1)) .. "~w~ - Deselect Prop]", 255, 255, 255, 255, 4, 0.45, true, true, true, true, 0, 0, 0, 0, 55) --function from client script ui.lua
-
-                    attachmentPos = endCoords
-                    canAttach = true
-                else
-                    if endCoords.z == 0.0 then
-                        SetEntityCoords(selectedProp, (plyPos.x + zoomAmount * camDirX), (plyPos.y + zoomAmount * camDirY), (plyPos.z + zoomAmount * camDirZ))
-                    
-                        attachmentPos = GetEntityCoords(selectedProp)
-                    else
+                if IsNear(plyPos, plyerPlatformPos, 10) then --function from client script client_general_functions.lua
+                    if entity == currentVehicle then
                         SetEntityCoords(selectedProp, endCoords)
 
+                        Draw3DText(propPos.x, propPos.y, propPos.z + 1.0, "[~g~Prop Selected - ~g~Can Attach Prop~w~]~n~[Press ~y~" .. ConvertInstructBtnText(GetControlInstructionalButton(1, keys.Backspace, 1)) .. "~w~ - Deselect Prop]", 255, 255, 255, 255, 4, 0.45, true, true, true, true, 0, 0, 0, 0, 55) --function from client script ui.lua
+
                         attachmentPos = endCoords
+                        canAttach = true
+                    else
+                        if endCoords.z == 0.0 then
+                            SetEntityCoords(selectedProp, (plyPos.x + zoomAmount * camDirX), (plyPos.y + zoomAmount * camDirY), (plyPos.z + zoomAmount * camDirZ))
+                        
+                            attachmentPos = GetEntityCoords(selectedProp)
+                        else
+                            SetEntityCoords(selectedProp, endCoords)
+
+                            attachmentPos = endCoords
+                        end
+
+                        Draw3DText(propPos.x, propPos.y, propPos.z + 1.0, "[~g~Prop Selected - ~r~Can't Attach Prop~w~]~n~[Press ~y~" .. ConvertInstructBtnText(GetControlInstructionalButton(1, keys.Backspace, 1)) .. "~w~ - Deselect Prop]", 255, 255, 255, 255, 4, 0.45, true, true, true, true, 0, 0, 0, 0, 55) --function from client script ui.lua
+
+                        canAttach = false
                     end
 
-                    Draw3DText(propPos.x, propPos.y, propPos.z + 1.0, "[~g~Prop Selected - ~r~Can't Attach Prop~w~]~n~[Press ~y~" .. ConvertInstructBtnText(GetControlInstructionalButton(1, keys.Backspace, 1)) .. "~w~ - Deselect Prop]", 255, 255, 255, 255, 4, 0.45, true, true, true, true, 0, 0, 0, 0, 55) --function from client script ui.lua
+                    if toggleRotation then
+                        SetEntityHeading(selectedProp, GetGameplayCamRot(2).z)
+                    else
+                        --SetEntityRotation(selectedProp, propRot, 2, true)
+                    end
+                
+                    DisableControlAction(1, keys.Backspace, true)
 
-                    canAttach = false
-                end
+                    if IsDisabledControlJustReleased(1, keys.Backspace) then
+                        if selectedProp ~= nil then
+                            displayUserMenu(false)
+                            displayScaleform(false)
 
-                if toggleRotation then
-                    SetEntityHeading(selectedProp, GetGameplayCamRot(2).z)
+                            SetEntityCollision(selectedProp, true, true)
+
+                            isPropSelected = false
+                            toggleRotation = false
+                            selectedProp = nil
+                        end
+                    end
                 else
-                    --SetEntityRotation(selectedProp, propRot, 2, true)
-                end
-            
-                DisableControlAction(1, keys.Backspace, true)
-
-                if IsDisabledControlJustReleased(1, keys.Backspace) then
-                    if selectedProp ~= nil then
-                        displayUserMenu(false)
-                        displayScaleform(false)
-
-                        SetEntityCollision(selectedProp, true, true)
-
-                        isPropSelected = false
-                        toggleRotation = false
-                        selectedProp = nil
-                    end
+                    Draw3DText(propPos.x, propPos.y, propPos.z + 1.0, "[~g~Prop Selected - ~r~Out of range!~w~]", 255, 255, 255, 255, 4, 0.45, true, true, true, true, 0, 0, 0, 0, 55) --function from client script ui.lua
                 end
             end
         end
