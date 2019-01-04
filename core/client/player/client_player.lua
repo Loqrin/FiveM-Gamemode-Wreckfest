@@ -160,6 +160,7 @@ AddEventHandler("client_player:BuildTimerStarting", function(time)
     isBuildTimerActive = true
 
     scoreboardUpdateTimer(time, "Build Time") --function from client script client_ui.lua
+    DrawNotificationMinimap("The arena is now ~r~closed!", "[User Terminal]")
 end)
 
 RegisterNetEvent("client_player:BuildTimerEnding")
@@ -168,11 +169,12 @@ AddEventHandler("client_player:BuildTimerEnding", function()
 end)
 
 RegisterNetEvent("client_player:RoundTimerStarting")
-AddEventHandler("client_player:RoundTimerStarting", function(time)
+AddEventHandler("client_player:RoundTimerStarting", function(plyID, time)
     isRoundTimerActive = true
 
-    scoreboardClear() --function from client script client_ui.lua
+    TriggerServerEvent("server_sync_player:clearScoreboard", GetPlayerName(PlayerId()))
     scoreboardUpdateTimer(time, "Round Time") --function from client script client_ui.lua
+    DrawNotificationMinimap("The arena is now ~g~open!", "[User Terminal]")    
 end)
 
 RegisterNetEvent("client_player:RoundTimerEnding")
@@ -180,11 +182,17 @@ AddEventHandler("client_player:RoundTimerEnding", function()
     isRoundTimerActive = false
 end)
 
-RegisterNetEvent("client_player:plyJoinedScoreboard")
-AddEventHandler("client_player:plyJoinedScoreboard", function(state, time)
+RegisterNetEvent("client_player:updateScoreboardTimer")
+AddEventHandler("client_player:updateScoreboardTimer", function(state, time)
     if state then
         scoreboardUpdateTimer(time, "Round Time")
     else
         scoreboardUpdateTimer(time, "Build Time")
     end
+end)
+
+RegisterNetEvent("client_player:clearScoreboard")
+AddEventHandler("client_player:clearScoreboard", function()
+    scoreboardClear()
+    TriggerServerEvent("server_sync_player:appendScoreboard", GetPlayerName(PlayerId()))
 end)

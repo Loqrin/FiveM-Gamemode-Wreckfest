@@ -37,7 +37,7 @@ local isBuildTimerOn = false
 --local maxRoundTime = 600 --5min
 --local maxBuildTime = 180 --3min
 
-local maxRoundTime = 1800
+local maxRoundTime = 15
 local maxBuildTime = 5
 
 --#[Local Functions]#--
@@ -365,7 +365,12 @@ function roundTimer(state)
         roundTime = maxRoundTime
         
         for k, v in pairs(allPlyers) do
-            TriggerClientEvent("client_player:RoundTimerStarting", v, roundTime)
+            local id = GetPlayerIdentifiers(v)
+
+            plyersScoreboard["" .. id[1]].kills = 0
+            plyersScoreboard["" .. id[1]].deaths = 0
+
+            TriggerClientEvent("client_player:RoundTimerStarting", v, id[1], roundTime)
         end
 
         print("[Wreckfest Log] Round Starting...")
@@ -428,11 +433,31 @@ function buildTimer(state)
     end
 end
 
-function plyJoinedScoreboard(plySource)
+local function plyJoinedScoreboard(plySource)
+    local allPlyers = GetPlayers()
+
+    for k, v in pairs(allPlyers) do
+        local id = GetPlayerIdentifiers(v)
+
+        if plyersScoreboard["" .. id[1]] ~= nil and v ~= plySource then
+            TriggerClientEvent("client_player:appendScoreboard", plySource, id[1], plyersScoreboard["" .. id[1]].name, plyersScoreboard["" .. id[1]].kills, plyersScoreboard["" .. id[1]].deaths)
+        end
+    end
+
     if not isBuildTimerOn then
-        TriggerClientEvent("client_player:plyJoinedScoreboard", plySource, false, buildTime)
+        TriggerClientEvent("client_player:updateScoreboardTimer", plySource, false, buildTime)
     elseif not isRoundTimerOn then
-        TriggerClientEvent("client_player:plyJoinedScoreboard", plySource, true, buildTime)
+        TriggerClientEvent("client_player:updateScoreboardTimer", plySource, true, buildTime)
+    end
+end
+
+local function clearScoreboard()
+    local allPlyers = GetPlayers()
+
+    plyersScoreboard = {}
+
+    for k, v in pairs(allPlyers) do
+        TriggerClientEvent("client_player:clearScoreboard", v)
     end
 end
 
@@ -487,4 +512,9 @@ end)
 RegisterServerEvent("server_sync_player:plyJoinedScoreboard")
 AddEventHandler("server_sync_player:plyJoinedScoreboard", function()
     plyJoinedScoreboard(source)
+end)
+
+RegisterServerEvent("server_sync_player:clearScoreboard")
+AddEventHandler("server_sync_player:clearScoreboard", function()
+    clearScoreboard()
 end)
