@@ -144,7 +144,9 @@ local function sellProp()
 end
 
 local function sellComplete(sellAmount)
-    TriggerServerEvent("server_sync_player:saveVehicle", currentVehicleModel, currentVehicleServerID)
+    if #ownProps > 0 then
+        TriggerServerEvent("server_sync_player:saveVehicle", currentVehicleModel, currentVehicleServerID)
+    end
     
     DrawNotificationMinimap("~g~Successfully sold prop for: ~y~$" .. sellAmount, "[User Terminal]")
 end
