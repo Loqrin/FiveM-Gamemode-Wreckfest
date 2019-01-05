@@ -8,6 +8,8 @@ Functionality to sync vehicles between players.
 currentVehicle = nil
 currentVehicleServerID = nil
 currentVehicleModel = nil
+currentVehicleWeight = 0
+currentVehicleMaxWeight = nil
 
 plyersVehicles = {}
 
@@ -37,6 +39,10 @@ function spawnVehicle(mustSync, model, pos, heading, serverID)
 
         currentVehicle = CreateVehicle(hash, pos.x, pos.y, pos.z + 2.0, heading, true, true)
         currentVehicleModel = model
+
+        if vehicles[model] ~= nil then --table from config file config_vehicles.lua
+            currentVehicleMaxWeight = vehicles[model].maxWeight
+        end
 
         --SetEntityAsMissionEntity(currentVehicle)
 

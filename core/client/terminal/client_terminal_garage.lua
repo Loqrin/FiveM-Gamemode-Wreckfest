@@ -77,15 +77,24 @@ local function retrievalComplete(vehicleData)
             end
 
             spawnProp(true, false, v.model, plyerPlatformPos, rot, false, dmgMultiplier, true, true, relativePos) --function from client script client_sync_props.lua
-        
-            for m, n in pairs(weapons) do --table from config file config_weapons.lua
-                if v.model == n.hash then
-                    spawnWeapon(false, ownLastSpawnedProp, n.weapon, n.hash, n.type, n.range, n.bulletDrop, n.cooldownTime)
 
-                    break
-                end
+            if weapons[v.model] == nil then
+                currentVehicleWeight = currentVehicleWeight + props[v.model].weight --table from config file config_props.lua
+            else
+                local weap = weapons[v.model].weapon
+                local weapModel = weapons[v.model].hash
+                local weapType = weapons[v.model].type
+                local weapRange = weapons[v.model].range
+                local weapBulletDrop = weapons[v.model].bulletDrop
+                local weapCooldownTime = weapons[v.model].cooldownTime
+
+                currentVehicleWeight = currentVehicleWeight + weapons[v.model].weight --table from config file config_weapons.lua
+
+                spawnWeapon(false, ownLastSpawnedProp, weap, weapModel, weapType, weapRange, weapBulletDrop, weapCooldownTime)
             end
         end
+
+        print(currentVehicleWeight)
 
         updatePropMenu() --function from client script client_build_vehicle.lua
     end

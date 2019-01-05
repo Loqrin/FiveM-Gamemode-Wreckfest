@@ -10,8 +10,8 @@ weapons =
 {
     ["prop_minigun_01"] = 
     {
-        name = "Machine Gun",
-        weapon = "WEAPON_MICROSMG",
+        name = "Turret",
+        weapon = "VEHICLE_WEAPON_TURRET_TECHNICAL",
         hash = "prop_minigun_01",
         image = "none",
         type = "bullet",
@@ -21,6 +21,7 @@ weapons =
         weaponDamage = 10,
         dmgMultiplier = 5,
         cooldownTime = 0.2,
+        weight = 100
     },
     ["w_ar_railgun"] = 
     {
@@ -35,7 +36,7 @@ weapons =
         weaponDamage = 50,
         dmgMultiplier = 5,
         cooldownTime = 3,
-        
+        weight = 150
     },
     ["w_lr_rpg"] = 
     {
@@ -49,12 +50,13 @@ weapons =
         bulletDrop = 0.8,
         weaponDamage = 25,
         dmgMultiplier = 5,
-        cooldownTime = 3
+        cooldownTime = 3,
+        weight = 120
     },
     ["w_mg_combatmg"] = 
     {
         name = "Combat Machine Gun",
-        weapon = "VEHICLE_WEAPON_TURRET_TECHNICAL",
+        weapon = "WEAPON_MICROSMG",
         hash = "w_mg_combatmg",
         image = "none",
         type = "bullet",
@@ -63,7 +65,8 @@ weapons =
         bulletDrop = 1.0,
         weaponDamage = 12,
         dmgMultiplier = 5,
-        cooldownTime = 0.5
+        cooldownTime = 0.5,
+        weight = 50
     },
     ["w_lr_homing"] = 
     {
@@ -77,6 +80,7 @@ weapons =
         bulletDrop = 1.0,
         weaponDamage = 70,
         dmgMultiplier = 5,
-        cooldownTime = 5
+        cooldownTime = 5,
+        weight = 180
     }
 }

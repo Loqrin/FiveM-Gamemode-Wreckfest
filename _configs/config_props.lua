@@ -15,7 +15,7 @@ props =
         image = "none",
         hash = "prop_const_fence01b_cr",
         dmgMultiplier = 5,
-        weight = 40
+        weight = 80
     },
     ["prop_mb_sandblock_01"] = 
     {
@@ -24,7 +24,7 @@ props =
         image = "none",
         hash = "prop_mb_sandblock_01",
         dmgMultiplier = 5,
-        weight = 100
+        weight = 120
     },
     ["prop_mb_sandblock_02"] = 
     {
@@ -33,7 +33,7 @@ props =
         image = "none",
         hash = "prop_mb_sandblock_02",
         dmgMultiplier = 5,
-        weight = 300
+        weight = 360
     },
     ["prop_mp_barrier_01"] = 
     {

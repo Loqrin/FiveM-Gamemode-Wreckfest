@@ -138,21 +138,33 @@ end
 
 local function attachProp()
     if canAttach then
-        local rot = vector3(GetEntityRotation(selectedProp, 2).x, GetEntityRotation(selectedProp, 2).y, GetEntityRotation(selectedProp, 2).z)
-        local relativePos = GetOffsetFromEntityGivenWorldCoords(currentVehicle, attachmentPos)
+        if props[selectedPropModel] ~= nil then --table from config file config_props.lua
+            currentVehicleWeight = currentVehicleWeight + props[selectedPropModel].weight
+        else
+            if weapons[selectedPropModel] ~= nil then --table from config file config_weapons.lua
+                currentVehicleWeight = currentVehicleWeight + weapons[selectedPropModel].weight
+            end
+        end
 
-        AttachEntityToEntity(selectedProp, currentVehicle, -1, relativePos.x, relativePos.y, relativePos.z, 0.0, 0.0, (rot.z - GetEntityRotation(currentVehicle, 2).z), false, false, false, false, 2, true)
-        SetEntityCollision(selectedProp, true, true)
+        if currentVehicleWeight < currentVehicleMaxWeight then
+            local rot = vector3(GetEntityRotation(selectedProp, 2).x, GetEntityRotation(selectedProp, 2).y, GetEntityRotation(selectedProp, 2).z)
+            local relativePos = GetOffsetFromEntityGivenWorldCoords(currentVehicle, attachmentPos)
 
-        syncAttachment(selectedProp, currentVehicleServerID, relativePos, rot.z) --function from client script client_sync_attachments.lua
+            AttachEntityToEntity(selectedProp, currentVehicle, -1, relativePos.x, relativePos.y, relativePos.z, 0.0, 0.0, (rot.z - GetEntityRotation(currentVehicle, 2).z), false, false, false, false, 2, true)
+            SetEntityCollision(selectedProp, true, true)
 
-        updatePropMenu()
+            syncAttachment(selectedProp, currentVehicleServerID, relativePos, rot.z) --function from client script client_sync_attachments.lua
 
-        isPropSelected = false
-        toggleRotation = false
-        selectedProp = nil
+            updatePropMenu()
 
-        DrawNotificationMinimap("Attachment ~g~successful!~w~", "[User Terminal]")
+            isPropSelected = false
+            toggleRotation = false
+            selectedProp = nil
+
+            DrawNotificationMinimap("Attachment ~g~successful!~w~", "[User Terminal]")
+        else
+            DrawNotificationMinimap("~r~Max vehicle weight ~w~has been reached!", "[User Terminal]")
+        end
     else
         DrawNotificationMinimap("~r~Nothing to attach to!", "[User Terminal]")
     end
