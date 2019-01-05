@@ -32,6 +32,7 @@ client_scripts
     "core/client/client_sync_attachments.lua",
     "core/client/client_sync_vehicles.lua",
     "core/client/client_sync_weapons.lua",
+    "core/client/client_sync_particles.lua",
     "core/client/player/client_player.lua",
     "core/client/player/client_spawn.lua",
     "core/client/player/client_build_vehicle.lua",
@@ -59,5 +60,6 @@ server_scripts
     "core/server/server_sync_player.lua",
     "core/server/server_sync_props.lua",
     "core/server/server_sync_attachments.lua",
-    "core/server/server_sync_vehicles.lua"
+    "core/server/server_sync_vehicles.lua",
+    "core/server/server_sync_particles.lua"
 }
