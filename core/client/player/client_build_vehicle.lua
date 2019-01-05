@@ -465,7 +465,5 @@ RegisterNUICallback("userMenuSelectedItem", function(data, cb)
     currentItem2 = data.item2
     currentKey = data.key
 
-    print(currentItem2)
-
     cb("ok")
 end)
