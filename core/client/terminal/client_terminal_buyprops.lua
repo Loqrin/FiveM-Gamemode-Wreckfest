@@ -64,6 +64,8 @@ local function purchaseComplete(charge, model, dmgMultiplier)
     spawnProp(true, false, model, pos, rot, true, dmgMultiplier) --function from client script client_sync_props.lua
 
     amountBoughtProps = amountBoughtProps + 1
+
+    updatePropMenu() --function from client script client_build_vehicle.lua
 end
 
 --#[Citizen Threads]#--

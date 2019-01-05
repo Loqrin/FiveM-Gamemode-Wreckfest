@@ -160,9 +160,12 @@ window.onload = function(e)
         $("#user_menu_list li").slice(maxUserMenuItems).remove();
         userMenuList[0].classList.add("user_menu_selected_item");
 
+        var val = userMenuList[0].textContent.split(":");
+
         $.post("http://loqscript_wreckfest_gamemode/userMenuSelectedItem", JSON.stringify({
             key: userMenuList[0].classList[0],
-            item: userMenuList[0].textContent
+            item1: val[0],
+            item2: val[1]
         }));
 
         $("#user_menu_container").fadeIn("fast", "swing");
@@ -179,9 +182,12 @@ window.onload = function(e)
         {
             userMenuSelectedItem++;
 
+            var val = userMenuList[userMenuSelectedItem].textContent.split(":");
+
             $.post("http://loqscript_wreckfest_gamemode/userMenuSelectedItem", JSON.stringify({
                 key: userMenuList[userMenuSelectedItem].classList[0],
-                item: userMenuList[userMenuSelectedItem].textContent
+                item1: val[0],
+                item2: val[1]
             }));
 
             if(userMenuSelectedItem <= maxUserMenuItems - 1)
@@ -233,9 +239,12 @@ window.onload = function(e)
             userMenuPreviousItem--;
         }
 
+        var val = userMenuList[userMenuSelectedItem].textContent.split(":");
+
         $.post("http://loqscript_wreckfest_gamemode/userMenuSelectedItem", JSON.stringify({
             key: userMenuList[userMenuSelectedItem].classList[0],
-            item: userMenuList[userMenuSelectedItem].textContent
+            item1: val[0],
+            item2: val[1]
         }));
     }
 
@@ -250,7 +259,8 @@ window.onload = function(e)
 
                 $.post("http://loqscript_wreckfest_gamemode/userMenuSelectedItem", JSON.stringify({
                     key: userMenuList[i].classList[0],
-                    item: userMenuList[i].textContent
+                    item1: val[0],
+                    item2: val[1]
                 }));
 
                 break;

@@ -86,6 +86,8 @@ local function retrievalComplete(vehicleData)
                 end
             end
         end
+
+        updatePropMenu() --function from client script client_build_vehicle.lua
     end
 
     currentVehicleData = vehicleData
@@ -104,6 +106,10 @@ local function storeVehicle()
     end
 
     despawnVehicle() --function from client script client_sync_vehicles.lua
+
+    updatePropMenu() --function from client script client_build_vehicle.lua
+    displayUserMenu(false) --function from client script client_ui.lua
+    displayScaleform(false) --function from client script client_ui.lua
 end
 
 local function saveVehicle()

@@ -30,6 +30,9 @@ Citizen.CreateThread(function()
                                 end
                             end
 
+                            displayUserMenu(false) --function from client script client_ui.lua
+                            displayScaleform(false) --function from client script client_ui.lua
+
                             isPlayerInArena = true
                         end
 
@@ -56,6 +59,11 @@ Citizen.CreateThread(function()
                 SetEntityCoords(currentVehicle, plyerPlatformPos.x, plyerPlatformPos.y, plyerPlatformPos.z + 4.0)
                 SetEntityHeading(currentVehicle, 272.64904785156)
                 TaskLeaveVehicle(plyPed, currentVehicle, 16)
+
+                if numOwnProps > 0 then --variable from client script client_sync_props.lua
+                    displayUserMenu(true) --function from client script client_ui.lua
+                    displayScaleform(true) --function from client script client_ui.lua
+                end
 
                 isPlayerInSpawn = true --variable from client script client_player.lua
                 isPlayerInArena = false

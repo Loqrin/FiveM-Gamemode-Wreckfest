@@ -19,19 +19,57 @@ local maxZoomAmount = 10.0
 local minZoomAmount = 1.0
 local incrementZoomAmount = 0.2
 
-local currentItem = ""
+local currentItem1 = ""
+local currentItem2 = ""
 local currentKey = ""
 
 local canAttach = false
 local attachmentPos = vector3(0, 0, 0)
 
-local isForcedSelected = false
+local isPropMenuDisplaying = false
 
 --#[Global Functions]#--
 function forceSelectedProp(prop)
     selectedProp = prop
+end
 
-    isForcedSelected = true
+function forceDetachment(serverID, prop, model)
+    DetachEntity(prop, false, false)
+    unsyncAttachment(serverID) --function from client script client_sync_attachments.lua
+
+    selectedProp = prop
+    selectedPropModel = model
+end
+
+function updatePropMenu()
+    local menuItems = {}
+
+    Citizen.Wait(200)
+
+    for k, v in pairs(ownProps) do --table from client script client_sync_props.lua
+        if ownAttachedProps[k] ~= nil then
+            table.insert(menuItems, CreateTable({
+                key = ownProps[k].serverID,
+                item1 = ownProps[k].model .. ":",
+                item2 = "Attached"
+            }))
+        else
+            table.insert(menuItems, CreateTable({
+                key = ownProps[k].serverID,
+                item1 = ownProps[k].model,
+                item2 = "none"
+            }))
+        end
+    end
+
+    local scaleformItems = 
+    {
+        {button = keys.UpArrow, text = "Navigate Up"},
+        {button = keys.DownArrow, text = "Navigate Down"},
+        {button = keys.Enter, text = "Execute"}
+    }
+
+    updateUserMenu("Current Props/Weapons", menuItems) --function from client script client_ui.lua
 end
 
 --#[Local Functions]#--
@@ -108,8 +146,7 @@ local function attachProp()
 
         syncAttachment(selectedProp, currentVehicleServerID, relativePos, rot.z) --function from client script client_sync_attachments.lua
 
-        displayUserMenu(false)
-        displayScaleform(false)
+        updatePropMenu()
 
         isPropSelected = false
         toggleRotation = false
@@ -130,13 +167,17 @@ local function sellProp()
 
             DeleteObject(selectedProp)
 
-            displayUserMenu(false)
-            displayScaleform(false)
+            if numOwnProps <= 0 then
+                displayUserMenu(false)
+                displayScaleform(false)
+            end
 
             isPropSelected = false
             toggleRotation = false
             selectedProp = nil
             selectedPropModel = nil
+
+            updatePropMenu()
 
             break
         end
@@ -173,6 +214,12 @@ local function userMenuFunctionality()
             attachProp()
         elseif currentKey == "sellProp" then
             sellProp()
+        elseif ownProps[currentKey] ~= nil and selectedProp == nil then
+            if currentItem2 == "Attached" then
+                forceDetachment(tonumber(currentKey), ownProps[currentKey].localID, ownProps[currentKey].model)
+            else
+                forceSelectedProp(ownProps[currentKey].localID)
+            end
         end
     end
 
@@ -219,6 +266,27 @@ Citizen.CreateThread(function()
             local didHit, endCoords, surfaceCoords, entity
 
             if selectedProp == nil then
+                if not isPropMenuDisplaying then
+                    local scaleformItems = 
+                    {
+                        {button = keys.UpArrow, text = "Navigate Up"},
+                        {button = keys.DownArrow, text = "Navigate Down"},
+                        {button = keys.Enter, text = "Execute"}
+                    }
+
+                    updatePropMenu()
+
+                    displayUserMenu(true) --function from client script client_ui.lua
+
+                    SetupScaleform(scaleformItems, "instructional_buttons") --function from client script client_ui.lua
+                    displayScaleform(true) --function from client script client_ui.lua
+
+                    isPropMenuDisplaying = true
+                end
+
+                userMenuScrollFunctionality() --function from client script client_ui.lua
+                userMenuFunctionality()
+
                 didHit, endCoords, surfaceCoords, entity = CastRay(plyPos, distancePos, -1, plyPed) --function from client script client_general_functions.lua
 
                 if didHit then
@@ -253,6 +321,8 @@ Citizen.CreateThread(function()
                             if selectedProp == nil then
                                 selectedProp = entity
                                 selectedPropModel = foundModel
+
+                                isPropMenuDisplaying = false
                             end
                         end
                     end
@@ -269,6 +339,8 @@ Citizen.CreateThread(function()
 
                                 selectedProp = entity
                                 selectedPropModel = foundModel
+
+                                isPropMenuDisplaying = false
                             end
                         end
                     end
@@ -299,10 +371,7 @@ Citizen.CreateThread(function()
                     }
 
                     updateUserMenu("Prop Selected", menuItems) --function from client script client_ui.lua
-                    displayUserMenu(true) --function from client script client_ui.lua
-
                     SetupScaleform(scaleformItems, "instructional_buttons") --function from client script client_ui.lua
-                    displayScaleform(true) --function from client script client_ui.lua
 
                     SetEntityCollision(selectedProp, false, true)
 
@@ -348,8 +417,12 @@ Citizen.CreateThread(function()
 
                     if IsDisabledControlJustReleased(1, keys.Backspace) then
                         if selectedProp ~= nil then
-                            displayUserMenu(false)
-                            displayScaleform(false)
+                            if numOwnProps <= 0 then
+                                displayUserMenu(false)
+                                displayScaleform(false)
+                            else
+                                updatePropMenu()
+                            end
 
                             SetEntityCollision(selectedProp, true, true)
 
@@ -376,8 +449,11 @@ end)
 
 --#[NUI Callbacks]#--
 RegisterNUICallback("userMenuSelectedItem", function(data, cb)
-    currentItem = data.item
+    currentItem1 = data.item1
+    currentItem2 = data.item2
     currentKey = data.key
+
+    print(currentItem2)
 
     cb("ok")
 end)
