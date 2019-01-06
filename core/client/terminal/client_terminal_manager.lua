@@ -69,6 +69,10 @@ RegisterNUICallback("userTerminalNavClick", function(data, cb)
     if data.key == "enterArena" then
         enterArena = true
 
+        if currentVehicleServerID ~= nil then
+            TriggerServerEvent("server_sync_player:saveVehicle", currentVehicleModel, currentVehicleServerID)
+        end
+
         displayUserTerminal(false)
 
         isPlyerInTerminal = false --variable from client script client_terminal_manager.lua
