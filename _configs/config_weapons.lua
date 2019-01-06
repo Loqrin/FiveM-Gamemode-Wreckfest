@@ -12,6 +12,7 @@ weapons =
     {
         name = "Turret",
         weapon = "VEHICLE_WEAPON_TURRET_TECHNICAL",
+        weaponHash = 2144528907,
         hash = "prop_minigun_01",
         image = "none",
         type = "bullet",
@@ -27,6 +28,7 @@ weapons =
     {
         name = "Rail Gun",
         weapon = "WEAPON_RAILGUN",
+        weaponHash = 1834241177,
         hash = "w_ar_railgun",
         image = "none",
         type = "explosive",
@@ -42,6 +44,7 @@ weapons =
     {
         name = "Rocket Launcher",
         weapon = "WEAPON_RPG",
+        weaponHash = -1312131151,
         hash = "w_lr_rpg",
         image = "none",
         type = "explosive",
@@ -57,6 +60,7 @@ weapons =
     {
         name = "Combat Machine Gun",
         weapon = "WEAPON_MICROSMG",
+        weaponHash = 324215364,
         hash = "w_mg_combatmg",
         image = "none",
         type = "bullet",
@@ -72,6 +76,7 @@ weapons =
     {
         name = "Cannon",
         weapon = "VEHICLE_WEAPON_TANK",
+        weaponHash = 1945616459,
         hash = "w_lr_homing",
         image = "none",
         type = "explosive",

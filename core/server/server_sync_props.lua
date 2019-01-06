@@ -69,51 +69,73 @@ local function unsyncProp(plySource, serverID)
 end
 
 local function checkHealth(plySource, serverID, health, weapon, ownerSource)
-    local allPlyers = GetPlayers()
-    local newHealth = health
+    local state = false
+    local weapIndex = nil
 
-    newHealth = newHealth - 30
+    for k, v in pairs(weapons) do --table from config file config_weapon_stats.lua
+        if weapon ~= weapons["" .. k].weaponHash then
+            weapIndex = k
+            state = false
+        else
+            state = true
 
-    print("[Wreckfest DEBUG] New health calculated: " .. newHealth)
+            break
+        end
+    end
 
-    if ownerSource ~= nil then
-        local ownerID = GetPlayerIdentifiers(ownerSource)
+    if state then
+        local allPlyers = GetPlayers()
+        local newHealth = health
 
-        for k, v in pairs(spawnedProps["" .. ownerID[1]]) do
-            if spawnedProps["" .. plyID[1]][k].serverID == serverID then
-                spawnedProps["" .. plyID[1]][k].health = newHealth
+        if weapons["" .. weapIndex] ~= nil then
+            newHealth = newHealth - (weapons["" .. weapIndex].weaponDamage * 10) --table from config file config_weapon_stats.lua
+        else
+            newhealth = newHealth - 30
+
+            print("[Wreckfest Log] The following weapon hash is invalid (update the config file config_weapon_stats.lua):" .. weapon)
+        end
+
+        --print("[Wreckfest DEBUG] New health calculated with weapon hash " .. weapon .. ": " .. newHealth)
+
+        if ownerSource ~= nil then
+            local ownerID = GetPlayerIdentifiers(ownerSource)
     
-                break
+            for k, v in pairs(spawnedProps["" .. ownerID[1]]) do
+                if spawnedProps["" .. plyID[1]][k].serverID == serverID then
+                    spawnedProps["" .. plyID[1]][k].health = newHealth
+        
+                    break
+                end
             end
-        end
-
-        for k, v in pairs(allPlyers) do
-            local plyID = GetPlayerIdentifiers(v)
-
-            if plyID[1] ~= ownerID[1] then
-                TriggerClientEvent("client_sync_props:updateHealth", v, true, serverID, newHealth)
-            end
-        end
-
-        TriggerClientEvent("client_sync_props:updateHealth", ownerSource, false, serverID, newHealth)
-    else
-        local plyID = GetPlayerIdentifiers(plySource)
-
-        for k, v in pairs(spawnedProps["" .. plyID[1]]) do
-            if spawnedProps["" .. plyID[1]][k].serverID == serverID then
-                spawnedProps["" .. plyID[1]][k].health = newHealth
     
-                break
+            for k, v in pairs(allPlyers) do
+                local plyID = GetPlayerIdentifiers(v)
+    
+                if plyID[1] ~= ownerID[1] then
+                    TriggerClientEvent("client_sync_props:updateHealth", v, true, serverID, newHealth)
+                end
             end
-        end
-
-        for k, v in pairs(allPlyers) do 
-            if tonumber(v) ~= plySource then
-                TriggerClientEvent("client_sync_props:updateHealth", v, true, serverID, newHealth)
+    
+            TriggerClientEvent("client_sync_props:updateHealth", ownerSource, false, serverID, newHealth)
+        else
+            local plyID = GetPlayerIdentifiers(plySource)
+    
+            for k, v in pairs(spawnedProps["" .. plyID[1]]) do
+                if spawnedProps["" .. plyID[1]][k].serverID == serverID then
+                    spawnedProps["" .. plyID[1]][k].health = newHealth
+        
+                    break
+                end
             end
+    
+            for k, v in pairs(allPlyers) do 
+                if tonumber(v) ~= plySource then
+                    TriggerClientEvent("client_sync_props:updateHealth", v, true, serverID, newHealth)
+                end
+            end
+    
+            TriggerClientEvent("client_sync_props:updateHealth", plySource, false, serverID, newHealth)
         end
-
-        TriggerClientEvent("client_sync_props:updateHealth", plySource, false, serverID, newHealth)
     end
 end
 

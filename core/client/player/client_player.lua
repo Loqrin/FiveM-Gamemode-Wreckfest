@@ -75,18 +75,22 @@ Citizen.CreateThread(function()
         local plyPed = GetPlayerPed(-1)
 
         for k, v in pairs(ownProps) do --table from client script client_sync_props.lua
-            if HasEntityBeenDamagedByWeapon(tonumber(v.localID), 0, 2) and tonumber(v.health) > 0 then
-                TriggerServerEvent("server_sync_props:checkPropHealth", v.serverID, v.health, GetSelectedPedWeapon(plyPed), nil)
+            for m, n in pairs(weapons) do --table from config file config_weapons.lua
+                if HasEntityBeenDamagedByWeapon(tonumber(v.localID), GetHashKey(weapons[m].weapon), 0) and tonumber(v.health) > 0 then
+                    TriggerServerEvent("server_sync_props:checkPropHealth", v.serverID, v.health, GetHashKey(weapons[m].weapon), nil)
 
-                ClearEntityLastDamageEntity(tonumber(v.localID))
+                    ClearEntityLastDamageEntity(tonumber(v.localID))
+                end
             end
         end
 
         for k, v in pairs(plyersProps) do --table from client script client_sync_props.lua
-            if HasEntityBeenDamagedByWeapon(tonumber(v.localID), 0, 2) and tonumber(v.health) > 0 then
-                TriggerServerEvent("server_sync_props:checkPropHealth", v.serverID, GetEntityHealth(v.localID), GetSelectedPedWeapon(plyPed), nil)
+            for m, n in pairs(weapons) do --table from config file config_weapons.lua
+                if HasEntityBeenDamagedByWeapon(tonumber(v.localID), GetHashKey(weapons[m].weapon), 0) and tonumber(v.health) > 0 then
+                    TriggerServerEvent("server_sync_props:checkPropHealth", v.serverID, GetEntityHealth(v.localID), GetHashKey(weapons[m].weapon), nil)
 
-                ClearEntityLastDamageEntity(tonumber(v.localID))
+                    ClearEntityLastDamageEntity(tonumber(v.localID))
+                end
             end
         end
 
