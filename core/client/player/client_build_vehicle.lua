@@ -29,8 +29,9 @@ local attachmentPos = vector3(0, 0, 0)
 local isPropMenuDisplaying = false
 
 --#[Global Functions]#--
-function forceSelectedProp(prop)
+function forceSelectedProp(prop, model)
     selectedProp = prop
+    selectedPropModel = model
 end
 
 function forceDetachment(serverID, prop, model)
@@ -138,15 +139,26 @@ end
 
 local function attachProp()
     if canAttach then
-        if props[selectedPropModel] ~= nil then --table from config file config_props.lua
-            currentVehicleWeight = currentVehicleWeight + props[selectedPropModel].weight
-        else
-            if weapons[selectedPropModel] ~= nil then --table from config file config_weapons.lua
-                currentVehicleWeight = currentVehicleWeight + weapons[selectedPropModel].weight
-            end
+        local newWeight = 0
+        local weightCorrect = false
+
+        print("Weight before: " .. currentVehicleWeight)
+
+        if props[selectedPropModel] ~= nil then
+            newWeight = currentVehicleWeight + props[selectedPropModel].weight
+        elseif weapons[selectedPropModel] ~= nil then
+            newWeight = currentVehicleWeight + weapons[selectedPropModel].weight
         end
 
-        if currentVehicleWeight < currentVehicleMaxWeight then
+        if newWeight <= currentVehicleMaxWeight then
+            currentVehicleWeight = newWeight
+            weightCorrect = true
+        else
+            currentVehicleWeight = currentVehicleMaxWeight
+            weightCorrect = false
+        end
+
+        if weightCorrect then
             local rot = vector3(GetEntityRotation(selectedProp, 2).x, GetEntityRotation(selectedProp, 2).y, GetEntityRotation(selectedProp, 2).z)
             local relativePos = GetOffsetFromEntityGivenWorldCoords(currentVehicle, attachmentPos)
 
@@ -168,6 +180,8 @@ local function attachProp()
     else
         DrawNotificationMinimap("~r~Nothing to attach to!", "[User Terminal]")
     end
+
+    print(currentVehicleWeight .. " | " .. selectedPropModel)
 end
 
 local function sellProp()
@@ -228,9 +242,15 @@ local function userMenuFunctionality()
             sellProp()
         elseif ownProps[currentKey] ~= nil and selectedProp == nil then
             if currentItem2 == "Attached" then
+                if props[ownProps[currentKey].model] ~= nil then
+                    currentVehicleWeight = currentVehicleWeight - props[ownProps[currentKey].model].weight
+                elseif weapons[ownProps[currentKey].model] ~= nil then
+                    currentVehicleWeight = currentVehicleWeight - weapons[ownProps[currentKey].model].weight
+                end
+
                 forceDetachment(tonumber(currentKey), ownProps[currentKey].localID, ownProps[currentKey].model)
             else
-                forceSelectedProp(ownProps[currentKey].localID)
+                forceSelectedProp(ownProps[currentKey].localID, ownProps[currentKey].model)
             end
         end
     end
@@ -346,6 +366,12 @@ Citizen.CreateThread(function()
                         
                         if IsDisabledControlJustReleased(1, keys.E) then
                             if selectedProp == nil then
+                                if props[foundModel] ~= nil then
+                                    currentVehicleWeight = currentVehicleWeight - props[foundModel].weight
+                                elseif weapons[foundModel] ~= nil then
+                                    currentVehicleWeight = currentVehicleWeight - weapons[foundModel].weight
+                                end
+
                                 DetachEntity(entity, false, false)
                                 unsyncAttachment(attachmentServerID) --function from client script client_sync_attachments.lua
 

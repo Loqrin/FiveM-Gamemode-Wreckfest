@@ -114,6 +114,8 @@ local function storeVehicle()
         ownWeapons = {}
     end
 
+    currentVehicleWeight = 0
+
     despawnVehicle() --function from client script client_sync_vehicles.lua
 
     updatePropMenu() --function from client script client_build_vehicle.lua
