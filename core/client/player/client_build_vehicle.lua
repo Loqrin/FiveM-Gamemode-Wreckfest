@@ -142,8 +142,6 @@ local function attachProp()
         local newWeight = 0
         local weightCorrect = false
 
-        print("Weight before: " .. currentVehicleWeight)
-
         if props[selectedPropModel] ~= nil then
             newWeight = currentVehicleWeight + props[selectedPropModel].weight
         elseif weapons[selectedPropModel] ~= nil then
@@ -180,8 +178,6 @@ local function attachProp()
     else
         DrawNotificationMinimap("~r~Nothing to attach to!", "[User Terminal]")
     end
-
-    print(currentVehicleWeight .. " | " .. selectedPropModel)
 end
 
 local function sellProp()

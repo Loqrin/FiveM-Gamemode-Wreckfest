@@ -94,8 +94,6 @@ local function retrievalComplete(vehicleData)
             end
         end
 
-        print(currentVehicleWeight)
-
         updatePropMenu() --function from client script client_build_vehicle.lua
     end
 
