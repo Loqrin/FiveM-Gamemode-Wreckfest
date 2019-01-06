@@ -80,6 +80,10 @@ function despawnProp(serverID)
 end
 
 --#[Local Functions]#--
+local function roundNum(num, numDecimalPlaces)
+    return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+end
+
 local function calculatePropAlpha(dmgMultiplier, health)
     return ((255 * ((health / (basePropHealth * dmgMultiplier)) * 100)) / 100)
 end
@@ -153,7 +157,7 @@ local function syncHealth(state, serverID, health)
         SetEntityHealth(prop, health)
 
         if GetEntityAlpha(prop) > 100.0 then
-            SetEntityAlpha(prop, Round(propAlpha, 0)) --function from client script client_general_functions.lua
+            SetEntityAlpha(prop, roundNum(propAlpha)) --function from client script client_general_functions.lua
         end
 
         if health < 5 then
