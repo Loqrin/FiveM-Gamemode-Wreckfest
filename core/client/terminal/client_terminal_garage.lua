@@ -59,7 +59,7 @@ end
 local function retrievalComplete(vehicleData)
     local pos = vector3(plyerPlatformPos.x, plyerPlatformPos.y, plyerPlatformPos.z + 4.0)
 
-    spawnVehicle(true, vehicleData.vehicle, pos, 272.64904785156, vehicleData.id) --function from client script client_sync_vehicles.lua
+    spawnVehicle(true, vehicleData.vehicle, pos, 272.0, vehicleData.id) --function from client script client_sync_vehicles.lua
 
     if vehicleData.props ~= nil then
         for k, v in pairs(vehicleData.props) do

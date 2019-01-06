@@ -47,7 +47,7 @@ end
 local function purchaseComplete(charge, model, serverID)
     plyerData.money = charge
 
-    spawnVehicle(true, model, plyerPlatformPos, 272.64904785156, serverID) --function from client script client_sync_vehicles.lua
+    spawnVehicle(true, model, plyerPlatformPos, 272.0, serverID) --function from client script client_sync_vehicles.lua
 end
 
 --#[Citizen Threads]#--

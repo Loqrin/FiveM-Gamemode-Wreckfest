@@ -53,7 +53,7 @@ local function purchaseComplete(charge, model, dmgMultiplier)
     local ranLeftRight = math.random(-6, 6)
     local ranForwardBackward = math.random(1, 2)
     local pos = vector3(0, 0, 0)
-    local rot = vector3(0, 0, 0)
+    local rot = vector3(0, 0, 272.0)
 
     if ranForwardBackward == 1 then
         pos = GetOffsetFromEntityInWorldCoords(plyerPlatform, ranLeftRight + 0.0, -8.0, 2.3) --variable from client script client_sync_platforms.lua
