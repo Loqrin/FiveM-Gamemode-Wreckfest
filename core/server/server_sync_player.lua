@@ -293,16 +293,18 @@ local function saveVehicle(plySource, hash, vehicleID)
             if plyersData["" .. plyID[1]].vehicles["" .. hash .. "_" .. vehicleID] ~= nil then
                 plyersData["" .. plyID[1]].vehicles["" .. hash .. "_" .. vehicleID].props = {}
 
-                for k, v in pairs(attachedProps["" .. plyID[1]]) do --table from server script server_sync_attachments.lua
-                    plyersData["" .. plyID[1]].vehicles["" .. hash .. "_" .. vehicleID].props["" .. attachedProps["" .. plyID[1]][k].serverID] = {}
-                    plyersData["" .. plyID[1]].vehicles["" .. hash .. "_" .. vehicleID].props["" .. attachedProps["" .. plyID[1]][k].serverID] = 
-                    {
-                        model = attachedProps["" .. plyID[1]][k].model,
-                        x = attachedProps["" .. plyID[1]][k].x,
-                        y = attachedProps["" .. plyID[1]][k].y,
-                        z = attachedProps["" .. plyID[1]][k].z,
-                        rotZ = attachedProps["" .. plyID[1]][k].rotZ
-                    }
+                if attachedProps["" .. plyID[1]] ~= nil then
+                    for k, v in pairs(attachedProps["" .. plyID[1]]) do --table from server script server_sync_attachments.lua
+                        plyersData["" .. plyID[1]].vehicles["" .. hash .. "_" .. vehicleID].props["" .. attachedProps["" .. plyID[1]][k].serverID] = {}
+                        plyersData["" .. plyID[1]].vehicles["" .. hash .. "_" .. vehicleID].props["" .. attachedProps["" .. plyID[1]][k].serverID] = 
+                        {
+                            model = attachedProps["" .. plyID[1]][k].model,
+                            x = attachedProps["" .. plyID[1]][k].x,
+                            y = attachedProps["" .. plyID[1]][k].y,
+                            z = attachedProps["" .. plyID[1]][k].z,
+                            rotZ = attachedProps["" .. plyID[1]][k].rotZ
+                        }
+                    end
                 end
 
                 print("[Wreckfest DEBUG] Successfully saved vehicle " .. hash .. " with the ID of " .. vehicleID)
