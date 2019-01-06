@@ -77,6 +77,7 @@ local function checkHealth(plySource, serverID, health, weapon, ownerSource)
             weapIndex = k
             state = false
         else
+            weapIndex = k
             state = true
 
             break
