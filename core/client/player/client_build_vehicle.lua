@@ -193,6 +193,8 @@ local function sellProp()
 
             DeleteObject(selectedProp)
 
+            Citizen.Wait(100)
+
             if numOwnProps <= 0 then
                 displayUserMenu(false)
                 displayScaleform(false)
