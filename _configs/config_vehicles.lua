@@ -18,48 +18,48 @@ vehicles =
         name = "Nagasaki Blazer",
         price = 10,
         image = "blazerVehicle.png",
-        maxWeight = 100
+        maxWeight = 200
     },
     ["REBEL"] = 
     {
         name = "Karin Rebel",
         price = 250,
         image = "none",
-        maxWeight = 300
+        maxWeight = 1200
     },
     ["INSURGENT2"] = 
     {
         name = "Insurgent",
         price = 960,
         image = "none",
-        maxWeight = 800
+        maxWeight = 2000
     },
     ["MESA3"] = 
     {
         name = "Canis Mesa",
         price = 380,
         image = "none",
-        maxWeight = 450
+        maxWeight = 1500
     },
     ["RAPTOR"] = 
     {
         name = "BF Raptor",
         price = 300,
         image = "none",
-        maxWeight = 200
+        maxWeight = 1000
     },
     ["OMNIS"] = 
     {
         name = "Obey Omnis",
         price = 440,
         image = "none",
-        maxWeight = 250
+        maxWeight = 800
     },
     ["SHEAVA"] = 
     {
         name = "Emperor ETR1",
         price = 800,
         image = "none",
-        maxWeight = 150
+        maxWeight = 600
     }
 }
