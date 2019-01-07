@@ -34,11 +34,11 @@ local isRoundTimerOn = false
 local buildTime = 0
 local isBuildTimerOn = false
 
---local maxRoundTime = 600 --5min
---local maxBuildTime = 180 --3min
+local maxRoundTime = 600 --5min
+local maxBuildTime = 180 --3min
 
-local maxRoundTime = 600
-local maxBuildTime = 5
+--local maxRoundTime = 600
+--local maxBuildTime = 5
 
 --#[Local Functions]#--
 local function createTable(data)
