@@ -31,7 +31,7 @@ Citizen.CreateThread(function()
     while true do
         local plyPed = GetPlayerPed(-1)
 
-        if IsPedDeadOrDying(plyPed, 1) and not plyDead then
+        if IsEntityDead(plyPed) and not plyDead then
             plyDead = true
 
             displayBlackoutMenu(true) --function from client script client_ui.lua

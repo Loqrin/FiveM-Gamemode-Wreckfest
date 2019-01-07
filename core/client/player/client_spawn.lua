@@ -57,6 +57,8 @@ function spawnPlayer()
         --variable currentVehicleData from client script client_terminal_garage.lua
         spawnVehicle(true, currentVehicleData.vehicle, pos, 272.64904785156, currentVehicleData.id) --function from client script client_sync_vehicles.lua
 
+        Citizen.Wait(1000)
+
         if currentVehicleData.props ~= nil then
             for k, v in pairs(currentVehicleData.props) do
                 local relativePos = vector3(tonumber(v.x), tonumber(v.y), tonumber(v.z))
@@ -124,7 +126,7 @@ local function plyerJoined()
     TriggerServerEvent("server_sync_player:loadData")
     TriggerServerEvent("server_sync_player:appendScoreboard", GetPlayerName(PlayerId()))
     TriggerServerEvent("server_sync_player:plyJoinedScoreboard")
-
+    
     Citizen.CreateThread(function()
         TriggerServerEvent("server_sync_props:plyerJoined")
 
