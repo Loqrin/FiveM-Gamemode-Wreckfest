@@ -52,7 +52,7 @@ function spawnProp(mustSync, forceSelect, model, pos, rot, collision, dmgMultipl
             forceSelectedProp(prop, model) --function from client script client_build_vehicle.lua
         end
 
-        Citizen.Wait(1000)
+        Citizen.Wait(500)
 
         if mustAttach then
             --currentVehicle variable from client script client_sync_vehicles.lua
@@ -60,14 +60,8 @@ function spawnProp(mustSync, forceSelect, model, pos, rot, collision, dmgMultipl
             SetEntityCollision(prop, true, true)
 
             if mustSyncAttachment then
-                for k, v in pairs(ownProps) do
-                    if ownProps[k].localID == prop then
-                        --currentVehicleServerID variable from client script client_sync_vehicles.lua
-                        syncAttachment(prop, currentVehicleServerID, relativePos, rot.z) --function from client script client_sync_attachments.lua
-
-                        break
-                    end
-                end
+                --currentVehicleServerID variable from client script client_sync_vehicles.lua
+                syncAttachment(prop, currentVehicleServerID, relativePos, rot.z) --function from client script client_sync_attachments.lua
             end
         end
     end
