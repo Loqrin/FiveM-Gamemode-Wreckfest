@@ -87,7 +87,7 @@ Citizen.CreateThread(function()
         for k, v in pairs(plyersProps) do --table from client script client_sync_props.lua
             for m, n in pairs(weapons) do --table from config file config_weapons.lua
                 if HasEntityBeenDamagedByWeapon(tonumber(v.localID), GetHashKey(weapons[m].weapon), 0) and tonumber(v.health) > 0 then
-                    TriggerServerEvent("server_sync_props:checkPropHealth", v.serverID, GetEntityHealth(v.localID), GetHashKey(weapons[m].weapon), nil)
+                    TriggerServerEvent("server_sync_props:checkPropHealth", v.serverID, GetEntityHealth(v.localID), GetHashKey(weapons[m].weapon), tonumber(v.plySource))
 
                     ClearEntityLastDamageEntity(tonumber(v.localID))
                 end
@@ -180,10 +180,12 @@ AddEventHandler("client_player:BuildTimerEnding", function()
 end)
 
 RegisterNetEvent("client_player:RoundTimerStarting")
-AddEventHandler("client_player:RoundTimerStarting", function(plyID, time)
+AddEventHandler("client_player:RoundTimerStarting", function(time)
     isRoundTimerActive = true
 
-    TriggerServerEvent("server_sync_player:clearScoreboard", GetPlayerName(PlayerId()))
+    scoreboardClear()
+    TriggerServerEvent("server_sync_player:appendScoreboard", GetPlayerName(PlayerId()))
+
     scoreboardUpdateTimer(time, "Round Time") --function from client script client_ui.lua
     DrawNotificationMinimap("The arena is now ~g~open!", "[User Terminal]")    
 end)
@@ -196,16 +198,10 @@ end)
 RegisterNetEvent("client_player:updateScoreboardTimer")
 AddEventHandler("client_player:updateScoreboardTimer", function(state, time)
     if state then
-        scoreboardUpdateTimer(time, "Round Time")
-    else
         scoreboardUpdateTimer(time, "Build Time")
+    else
+        scoreboardUpdateTimer(time, "Round Time")
     end
-end)
-
-RegisterNetEvent("client_player:clearScoreboard")
-AddEventHandler("client_player:clearScoreboard", function()
-    scoreboardClear()
-    TriggerServerEvent("server_sync_player:appendScoreboard", GetPlayerName(PlayerId()))
 end)
 
 RegisterNetEvent("client_player:paymentComplete")

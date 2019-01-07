@@ -347,12 +347,10 @@ local function appendScoreboard(plySource, plyName)
     local plyID = GetPlayerIdentifiers(plySource)
     local allPlyers = GetPlayers()
 
-    if plyersScoreboard["" .. plyID[1]] == nil then
-        plyersScoreboard["" .. plyID[1]] = {name = plyName, kills = 0, deaths = 0}
+    plyersScoreboard["" .. plyID[1]] = {name = plyName, kills = 0, deaths = 0}
 
-        for k, v in pairs(allPlyers) do
-            TriggerClientEvent("client_player:appendScoreboard", v, plyID[1], plyName, 0, 0)
-        end
+    for k, v in pairs(allPlyers) do
+        TriggerClientEvent("client_player:appendScoreboard", v, plyID[1], plyName, 0, 0)
     end
 end
 
@@ -383,18 +381,19 @@ function roundTimer(state)
             plyersScoreboard["" .. id[1]].kills = 0
             plyersScoreboard["" .. id[1]].deaths = 0
 
-            TriggerClientEvent("client_player:RoundTimerStarting", v, id[1], roundTime)
+            TriggerClientEvent("client_player:RoundTimerStarting", v, roundTime)
         end
+
+        isRoundTimerOn = true
 
         print("[Wreckfest Log] Round Starting...")
     else
         roundTime = roundTime - 1
     end
 
-    if not isRoundTimerOn then
+    if isRoundTimerOn then
         if roundTime <= 0 then
-            isBuildTimerOn = false
-            isRoundTimerOn = true
+            isRoundTimerOn = false
 
             for k, v in pairs(allPlyers) do
                 TriggerClientEvent("client_player:RoundTimerEnding", v)
@@ -421,15 +420,16 @@ function buildTimer(state)
             TriggerClientEvent("client_player:BuildTimerStarting", v, buildTime)
         end
 
+        isBuildTimerOn = true
+
         print("[Wreckfest Log] Build Time Starting...")
     else
         buildTime = buildTime - 1
     end
 
-    if not isBuildTimerOn then
+    if isBuildTimerOn then
         if buildTime <= 0 then
-            isRoundTimerOn = false
-            isBuildTimerOn = true
+            isBuildTimerOn = false
 
             for k, v in pairs(allPlyers) do
                 TriggerClientEvent("client_player:BuildTimerEnding", v)
@@ -452,25 +452,21 @@ local function plyJoinedScoreboard(plySource)
     for k, v in pairs(allPlyers) do
         local id = GetPlayerIdentifiers(v)
 
-        if plyersScoreboard["" .. id[1]] ~= nil and v ~= plySource then
-            TriggerClientEvent("client_player:appendScoreboard", plySource, id[1], plyersScoreboard["" .. id[1]].name, plyersScoreboard["" .. id[1]].kills, plyersScoreboard["" .. id[1]].deaths)
+        if plyersScoreboard["" .. id[1]] ~= nil then
+            if tonumber(v) ~= plySource then
+                TriggerClientEvent("client_player:appendScoreboard", plySource, id[1], plyersScoreboard["" .. id[1]].name, plyersScoreboard["" .. id[1]].kills, plyersScoreboard["" .. id[1]].deaths)
+            end
         end
     end
 
-    if not isBuildTimerOn then
-        TriggerClientEvent("client_player:updateScoreboardTimer", plySource, false, buildTime)
-    elseif not isRoundTimerOn then
-        TriggerClientEvent("client_player:updateScoreboardTimer", plySource, true, buildTime)
-    end
-end
-
-local function clearScoreboard()
-    local allPlyers = GetPlayers()
-
-    plyersScoreboard = {}
-
-    for k, v in pairs(allPlyers) do
-        TriggerClientEvent("client_player:clearScoreboard", v)
+    if isBuildTimerOn then
+        --TriggerClientEvent("client_player:updateScoreboardTimer", plySource, true, buildTime)
+        TriggerClientEvent("client_player:BuildTimerStarting", plySource, buildTime)
+        print("Build timer is on")
+    elseif isRoundTimerOn then
+        --TriggerClientEvent("client_player:updateScoreboardTimer", plySource, false, buildTime)
+        TriggerClientEvent("client_player:RoundTimerStarting", plySource, roundTime)
+        print("Round timer is on")
     end
 end
 
@@ -536,11 +532,6 @@ end)
 RegisterServerEvent("server_sync_player:plyJoinedScoreboard")
 AddEventHandler("server_sync_player:plyJoinedScoreboard", function()
     plyJoinedScoreboard(source)
-end)
-
-RegisterServerEvent("server_sync_player:clearScoreboard")
-AddEventHandler("server_sync_player:clearScoreboard", function()
-    clearScoreboard()
 end)
 
 RegisterServerEvent("server_sync_player:payment")
