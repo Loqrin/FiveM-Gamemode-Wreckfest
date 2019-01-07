@@ -52,7 +52,7 @@ function spawnProp(mustSync, forceSelect, model, pos, rot, collision, dmgMultipl
             forceSelectedProp(prop, model) --function from client script client_build_vehicle.lua
         end
 
-        Citizen.Wait(100)
+        Citizen.Wait(1000)
 
         if mustAttach then
             --currentVehicle variable from client script client_sync_vehicles.lua
