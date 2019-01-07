@@ -91,6 +91,10 @@ local function vehicleSync(plySource, serverID, pos, pos2)
 end
 
 local function vehicleUnsyc(serverID)
+    if DoesEntityExist(plyersVehicles["" .. serverID].localID) then
+        DeleteVehicle(plyersVehicles["" .. serverID].localID)
+    end
+
     plyersVehicles["" .. serverID] = nil
 end
 
