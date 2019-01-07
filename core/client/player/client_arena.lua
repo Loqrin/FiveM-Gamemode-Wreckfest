@@ -51,9 +51,15 @@ Citizen.CreateThread(function()
         end
 
         if isPlayerInArena then
-            if not isRoundTimerActive then --variable from client script client_player.lua
-                local plyPed = GetPlayerPed(-1)
+            local plyPed = GetPlayerPed(-1)
 
+            SetEntityInvincible(currentVehicle, false)
+            SetEntityInvincible(plyPed, false)
+
+            SetVehicleDoorsLocked(currentVehicle, 2)
+            SetVehicleDoorsLocked(currentVehicle, 4)
+
+            if not isRoundTimerActive then --variable from client script client_player.lua
                 enterArena = false
 
                 SetEntityCoords(currentVehicle, plyerPlatformPos.x, plyerPlatformPos.y, plyerPlatformPos.z + 4.0)
