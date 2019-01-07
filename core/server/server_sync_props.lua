@@ -96,14 +96,14 @@ local function checkHealth(plySource, serverID, health, weapon, ownerSource)
             print("[Wreckfest Log] The following weapon hash is invalid (update the config file config_weapon_stats.lua):" .. weapon)
         end
 
-        --print("[Wreckfest DEBUG] New health calculated with weapon hash " .. weapon .. ": " .. newHealth)
+        print("[Wreckfest DEBUG] New health calculated with weapon hash " .. weapon .. ": " .. newHealth)
 
         if ownerSource ~= nil then
             local ownerID = GetPlayerIdentifiers(ownerSource)
     
             for k, v in pairs(spawnedProps["" .. ownerID[1]]) do
-                if spawnedProps["" .. plyID[1]][k].serverID == serverID then
-                    spawnedProps["" .. plyID[1]][k].health = newHealth
+                if spawnedProps["" .. ownerID[1]][k].serverID == serverID then
+                    spawnedProps["" .. ownerID[1]][k].health = newHealth
         
                     break
                 end
