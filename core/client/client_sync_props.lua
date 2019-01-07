@@ -161,8 +161,16 @@ local function syncHealth(state, serverID, health)
         end
 
         if health < 5 then
-            if not state then
-                local causeFuckTimeouts = serverID --i spent way too long figuring out that this was a solution to a problem
+            
+
+            if state then
+                local causeFuckTimeouts = serverID
+
+                SetTimeout(100, function()
+                    --unsyncProp(causeFuckTimeouts)
+                end)
+            else
+                local causeFuckTimeouts = serverID
                 local pos = GetEntityCoords(ownProps["" .. serverID].localID)
 
                 TriggerServerEvent("server_sync_particles:syncParticleEffect", "destroy", pos.x, pos.y, pos.z)
