@@ -61,6 +61,8 @@ local function retrievalComplete(vehicleData)
 
     spawnVehicle(true, vehicleData.vehicle, pos, 272.0, vehicleData.id) --function from client script client_sync_vehicles.lua
 
+    Citizen.Wait(1000)
+
     if vehicleData.props ~= nil then
         for k, v in pairs(vehicleData.props) do
             local relativePos = vector3(tonumber(v.x), tonumber(v.y), tonumber(v.z))

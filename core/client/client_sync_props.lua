@@ -52,8 +52,6 @@ function spawnProp(mustSync, forceSelect, model, pos, rot, collision, dmgMultipl
             forceSelectedProp(prop, model) --function from client script client_build_vehicle.lua
         end
 
-        Citizen.Wait(500)
-
         if mustAttach then
             --currentVehicle variable from client script client_sync_vehicles.lua
             AttachEntityToEntity(prop, currentVehicle, -1, relativePos.x, relativePos.y, relativePos.z, 0.0, 0.0, (rot.z - GetEntityRotation(currentVehicle, 2).z), false, false, false, false, 2, true)
