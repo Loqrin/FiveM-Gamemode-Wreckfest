@@ -37,8 +37,10 @@ function spawnVehicle(mustSync, model, pos, heading, serverID)
             Citizen.Wait(1)
         end
 
-        currentVehicle = CreateVehicle(hash, pos.x, pos.y, pos.z + 2.0, heading, true, true)
+        currentVehicle = CreateVehicle(hash, pos.x, pos.y, pos.z, heading, true, true)
         currentVehicleModel = model
+
+        SetVehicleOnGroundProperly(currentVehicle)
 
         if vehicles[model] ~= nil then --table from config file config_vehicles.lua
             currentVehicleMaxWeight = vehicles[model].maxWeight
