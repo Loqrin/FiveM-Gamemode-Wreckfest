@@ -38,7 +38,7 @@ Citizen.CreateThread(function()
         local plyPed = GetPlayerPed(-1)
         local plyPos = GetEntityCoords(plyPed)
 
-        if doesPlyerHavePlatform and doesPlyerHaveTerminal and not isPlyerInSpawnMenu then --variables from client script client_sync_platforms.lua
+        if doesPlyerHavePlatform and doesPlyerHaveTerminal and not isPlyerInSpawnMenu and not vehicleRetrievalProgress then --variables from client script client_sync_platforms.lua
             if IsNear(plyPos, plyerTerminalPos, 2.0) then --function from client script client_general_functions.lua
                 DisableControlAction(1, keys.E, true)
 

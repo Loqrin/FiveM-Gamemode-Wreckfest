@@ -6,6 +6,7 @@ Functionality to allow players to store/save/retrieve their vehicles from thier 
 
 --#[Global Variables]#--
 currentVehicleData = {}
+vehicleRetrievalProgress = false
 
 --#[Local Variables]#--
 local isMenuSetup = false
@@ -61,6 +62,7 @@ local function retrievalComplete(vehicleData)
 
     spawnVehicle(true, vehicleData.vehicle, pos, 272.0, vehicleData.id) --function from client script client_sync_vehicles.lua
 
+    vehicleRetrievalProgress = true
     DrawNotificationMinimap("Retrieval ~y~in progress!", "[User Terminal]")
 
     Citizen.Wait(1000)
@@ -163,6 +165,7 @@ RegisterNetEvent("client_terminal_garage:retrievalComplete")
 AddEventHandler("client_terminal_garage:retrievalComplete", function(vehicleData)
     retrievalComplete(vehicleData)
 
+    vehicleRetrievalProgress = false
     DrawNotificationMinimap("Retrieval ~g~successful!~w~", "[User Terminal]")
 end)
 
