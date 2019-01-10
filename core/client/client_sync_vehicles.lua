@@ -182,3 +182,19 @@ AddEventHandler("client_sync_vehicles:plyerJoined", function(plySource, serverID
 
     plyerJoined(plySource, serverID, pos, pos2)
 end)
+
+RegisterNetEvent("client_sync_vehicles:resourceRestart")
+AddEventHandler("client_sync_vehicles:resourceRestart", function()
+    local handle, vehicle = FindFirstVehicle()
+    local foundVehicle
+
+    repeat
+        if DoesEntityExist(vehicle) then
+            DeleteVehicle(vehicle)
+        end
+
+        foundVehicle, vehicle = FindNextVehicle(handle)
+    until not foundVehicle
+
+    EndFindVehicle(handle)
+end)

@@ -110,3 +110,13 @@ AddEventHandler("playerDropped", function(reason)
 
     clearDisconnectedVehicles(plyID[1], plySource)
 end)
+
+AddEventHandler("onResourceStart", function()
+    SetTimeout(2000, function()
+        local allPlyers = GetPlayers()
+
+        for k, v in pairs(allPlyers) do
+            TriggerClientEvent("client_sync_vehicles:resourceRestart", v)
+        end
+    end)
+end)
