@@ -166,6 +166,16 @@ AddEventHandler("onClientResourceStart", function()
     end
 end)
 
+RegisterNetEvent("client_spawn:resourceRestart")
+AddEventHandler("client_spawn:resourceRestart", function()
+    if not plyFirstJoin then
+        requestMap(true) --function from client script client_map_loader.lua
+        plyerJoined()
+
+        plyFirstJoin = true
+    end
+end)
+
 --#[NUI Callbacks]#--
 RegisterNUICallback("spawnPlayer", function(data, cb)
     Citizen.CreateThread(function()

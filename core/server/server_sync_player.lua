@@ -543,3 +543,13 @@ RegisterServerEvent("server_sync_player:sellAllProps")
 AddEventHandler("server_sync_player:sellAllProps", function()
     sellAllProps(source)
 end)
+
+AddEventHandler("onResourceStart", function()
+    SetTimeout(2000, function()
+        local allPlyers = GetPlayers()
+
+        for k, v in pairs(allPlyers) do
+            TriggerClientEvent("client_spawn:resourceRestart", v)
+        end
+    end)
+end)
