@@ -15,11 +15,16 @@ isBuildTimerActive = false
 isRoundTimerActive = false
 
 --#[Local Variables]#--
+local scoreboardPlyers = {}
 local isScoreboardDisplaying = false
 
 --#[Local Functions]#--
 local function appendScoreboard(plyID, plyName, kills, deaths)
-    scoreboardAddPlyer(plyID, plyName, kills, deaths) --function from client script client_ui.lua
+    if scoreboardPlyers["" .. plyID] == nil then
+        scoreboardPlyers["" .. plyID] = {plyID = plyID}
+
+        scoreboardAddPlyer(plyID, plyName, kills, deaths) --function from client script client_ui.lua
+    end
 end
 
 local function updateScoreboard(plyID, plyName, kills, deaths)
@@ -183,6 +188,7 @@ RegisterNetEvent("client_player:RoundTimerStarting")
 AddEventHandler("client_player:RoundTimerStarting", function(time)
     isRoundTimerActive = true
 
+    scoreboardPlyers = {}
     scoreboardClear()
     TriggerServerEvent("server_sync_player:appendScoreboard", GetPlayerName(PlayerId()))
 
