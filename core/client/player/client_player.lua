@@ -18,6 +18,8 @@ isRoundTimerActive = false
 local scoreboardPlyers = {}
 local isScoreboardDisplaying = false
 
+local deadPlyers = {}
+
 --#[Local Functions]#--
 local function appendScoreboard(plyID, plyName, kills, deaths)
     if scoreboardPlyers["" .. plyID] == nil then
@@ -31,27 +33,70 @@ local function updateScoreboard(plyID, plyName, kills, deaths)
     scoreboardUpdatePlyer(plyID, plyName, kills, deaths) --function from client script client_ui.lua
 end
 
+local function plyerDeath(otherID, otherPed)
+    local plyID = PlayerId()
+    local entity, weapon = NetworkGetEntityKillerOfPlayer(otherID)
+    local otherName = GetPlayerName(otherID)
+    local deathMsg = "~y~" .. otherName .. " ~w~died."
+    
+    if IsPedAPlayer(entity) then
+        local killer = NetworkGetPlayerIndexFromPed(entity)
+        local killerName = GetPlayerName(killer)
+
+        if killerName == otherName then
+            deathMsg = "~y~" .. otherName .. " ~w~commited suicide."
+        elseif killerName == GetPlayerName(plyID) then
+            deathMsg = "~y~You ~w~obliterated ~y~" .. otherName .. "~w~."
+
+            TriggerServerEvent("server_sync_player:updateScoreboard", GetPlayerName(plyID), true, false)
+            TriggerServerEvent("server_sync_player:payment")
+        else
+            deathMsg = "~y~" .. killerName .. " ~w~obliterated ~y~" .. otherName .. "~w~."
+        end
+    end
+
+    DrawNotifcationNormal(deathMsg) --function from client script client_ui.lua
+end
+
 --#[Citizen Threads]#--
 Citizen.CreateThread(function()
     while true do
         local plyPed = GetPlayerPed(-1)
+        local plyID = PlayerId()
+        local numPlyers = NetworkGetNumConnectedPlayers()
 
-        if IsEntityDead(plyPed) and not plyDead then
-            plyDead = true
+        for i = 0, numPlyers, 1 do
+            if NetworkIsPlayerConnected(i) then
+                local otherPed = GetPlayerPed(i)
 
-            displayBlackoutMenu(true) --function from client script client_ui.lua
+                if DoesEntityExist(otherPed) and IsEntityDead(otherPed) then
+                    if deadPlyers[i] == nil then
+                        plyerDeath(i, otherPed)
 
-            Citizen.Wait(3000)
+                        if i == plyID then
+                            plyDead = true
 
-            TriggerServerEvent("server_sync_player:updateScoreboard", GetPlayerName(PlayerId()), false, true)
+                            displayBlackoutMenu(true) --function from client script client_ui.lua
+                            Citizen.Wait(3000)
 
-            spawnPlayer() --function from client script client_spawn.lua
+                            spawnPlayer()
+                            TriggerServerEvent("server_sync_player:updateScoreboard", GetPlayerName(plyID), false, true)
 
-            Citizen.Wait(1000)
+                            Citizen.Wait(1000)
 
-            displayBlackoutMenu(false)
+                            displayBlackoutMenu(false)
 
-            plyDead = false
+                            plyDead = false
+                        end
+
+                        deadPlyers[i] = true
+                    end
+                else
+                    if deadPlyers[i] ~= nil then
+                        deadPlyers[i] = nil
+                    end
+                end
+            end
         end
 
         if isPlayerInSpawn then
@@ -68,6 +113,26 @@ Citizen.CreateThread(function()
                 SetEntityInvincible(currentVehicle, true)
                 SetVehicleDoorsLocked(currentVehicle, 2)
                 FreezeEntityPosition(currentVehicle, true)
+            end
+        end
+
+        DisableControlAction(1, keys.Tab, true)
+
+        if not IsPedDeadOrDying(plyPed) then --variable from client script player.lua
+            if IsDisabledControlPressed(1, keys.Tab) then
+                if not isScoreboardDisplaying then
+                    isScoreboardDisplaying = true
+
+                    displayScoreboard(true) --function from client script client_ui.lua
+                end
+            end
+            
+            if IsDisabledControlJustReleased(1, keys.Tab) then
+                if isScoreboardDisplaying then
+                    isScoreboardDisplaying = false
+
+                    displayScoreboard(false)
+                end
             end
         end
 
@@ -102,57 +167,6 @@ Citizen.CreateThread(function()
         Citizen.Wait(100)
     end
 end)
-
-Citizen.CreateThread(function()
-    local deadPeds = {}
-
-    while true do
-        local plyPed = GetPlayerPed(-1)
-        local aiming, target = GetEntityPlayerIsFreeAimingAt(PlayerId())
-
-        DisableControlAction(1, keys.Tab, true)
-
-        if not IsPedDeadOrDying(plyPed) then --variable from client script player.lua
-            if IsDisabledControlPressed(1, keys.Tab) then
-                if not isScoreboardDisplaying then
-                    isScoreboardDisplaying = true
-
-                    displayScoreboard(true) --function from client script client_ui.lua
-                end
-            end
-            
-            if IsDisabledControlJustReleased(1, keys.Tab) then
-                if isScoreboardDisplaying then
-                    isScoreboardDisplaying = false
-
-                    displayScoreboard(false)
-                end
-            end
-        end
-
-        for k, v in pairs(plyersVehicles) do --table from client script client_sync_vehicles.lua
-            local veh = plyersVehicles["" .. k].localID
-
-            if IsEntityAVehicle(veh) and not plyersVehicles["" .. k].destroyed then
-                if HasEntityBeenDamagedByWeapon(veh, 0, 2) then
-                    if GetVehicleEngineHealth(veh) <= 0 then
-                        plyersVehicles["" .. k].destroyed = true
-                        
-                        TriggerServerEvent("server_sync_player:updateScoreboard", GetPlayerName(PlayerId()), true, false)
-                        TriggerServerEvent("server_sync_player:payment")
-
-                        break
-                    end
-
-                    ClearEntityLastDamageEntity(veh)
-                end
-            end
-        end
-
-        Citizen.Wait(1)
-    end
-end)
-
 
 --#[Event Handlers]#--
 RegisterNetEvent("client_player:loadData")
