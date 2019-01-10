@@ -61,6 +61,8 @@ local function retrievalComplete(vehicleData)
 
     spawnVehicle(true, vehicleData.vehicle, pos, 272.0, vehicleData.id) --function from client script client_sync_vehicles.lua
 
+    DrawNotificationMinimap("Retrieval ~y~in progress!", "[User Terminal]")
+
     Citizen.Wait(1000)
 
     if vehicleData.props ~= nil then
