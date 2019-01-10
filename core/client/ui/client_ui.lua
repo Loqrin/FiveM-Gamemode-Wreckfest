@@ -273,6 +273,12 @@ function DrawNotificationMinimap(text, heading)
 	DrawNotification(false, true)
 end
 
+function DrawNotifcationNormal(text)
+    SetNotificationTextEntry("STRING")
+    AddTextComponentString(text)
+    DrawNotification(false, false)
+end
+
 function ConvertInstructBtnText(btn)
     local convertedText = "Unknown Btn"
 
