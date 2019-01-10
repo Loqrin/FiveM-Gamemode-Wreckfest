@@ -6,7 +6,6 @@ Functionality provided to spawn the player in, as well as handle the player when
 
 --#[Global Variables]#--
 plyFirstJoin = false
-isPlyerInSpawnMenu = false
 
 --#[Local Variables]#--
 local spawnOverview = vector3(-1890.4526367188, -1902.8321533203, 61.146965026855)
@@ -16,10 +15,8 @@ function spawnPlayer()
     local plyPed = GetPlayerPed(-1)
     local plyModelHash = GetHashKey(plyDefaultModel) --variable from client script config_client_player.lua
 
-    DoScreenFadeOut(500)
+    displayBlackoutMenu(true) --function from client script client_ui.lua
     displayWelcomeMenu(false) --function from client script client_ui.lua
-
-    Citizen.Wait(3000)
 
     RequestModel(plyModelHash)
     while not HasModelLoaded(plyModelHash) or not HasCollisionForModelLoaded(plyModelHash) do
@@ -32,7 +29,7 @@ function spawnPlayer()
 
     plyPed = GetPlayerPed(-1)
 
-    if enterArena then --variable from client script client_terminal_manager.lua
+    if isPlayerInArena then --variable from client script client_player.lua
         local pos = vector3(plyerPlatformPos.x, plyerPlatformPos.y, plyerPlatformPos.z + 4.0)
         local ranSpawn = math.random(1, #mapSpawnPoints["2"]) --table from clinet script client_map_loader.lua
         local inc = 0
@@ -49,10 +46,9 @@ function spawnPlayer()
         end
     
         unsyncVehicle(currentVehicleServerID) --function from client script client_sync_vehicles.lua
-
         DeleteVehicle(currentVehicle)
 
-        Citizen.Wait(100)
+        Citizen.Wait(500)
 
         --variable currentVehicleData from client script client_terminal_garage.lua
         spawnVehicle(true, currentVehicleData.vehicle, pos, 272.64904785156, currentVehicleData.id) --function from client script client_sync_vehicles.lua
@@ -101,74 +97,67 @@ function spawnPlayer()
             end
         end
     else
+        Citizen.Wait(2000)
+
         SetEntityCoords(plyPed, plyerPlatformPos.x, plyerPlatformPos.y, plyerPlatformPos.z + 4.0)
+
+        isPlayerInSpawn = true --variable from client script client_player.lua
     end
 
     FreezeEntityPosition(plyPed, false)
     SetEntityVisible(plyPed, true)
     SetEntityInvincible(plyPed, false)
 
-    isPlayerInSpawn = true --variable from client script client_player.lua
-
     TransitionFromBlurred(500)
-    DoScreenFadeIn(500)
-
-    Citizen.Wait(1000)
+    displayBlackoutMenu(false)
 end
 
 --#[Local Functions]#--
 local function plyerJoined()
     local plyPed = GetPlayerPed(-1)
 
-    isPlyerInSpawnMenu = true
-
     TriggerServerEvent("server_sync_platforms:assignPlatform")
     TriggerServerEvent("server_sync_player:loadData")
     TriggerServerEvent("server_sync_player:appendScoreboard", GetPlayerName(PlayerId()))
+    TriggerServerEvent("server_sync_props:plyerJoined")
+
+    Citizen.Wait(500)
+
+    TriggerServerEvent("server_sync_vehicles:plyerJoined")
+
+    Citizen.Wait(500)
+
+    TriggerServerEvent("server_sync_attachments:plyerJoined")
+
+    Citizen.Wait(500)
+
     TriggerServerEvent("server_sync_player:plyJoinedScoreboard")
-    
-    Citizen.CreateThread(function()
-        TriggerServerEvent("server_sync_props:plyerJoined")
-
-        Citizen.Wait(2000)
-
-        TriggerServerEvent("server_sync_vehicles:plyerJoined")
-
-        Citizen.Wait(500)
-
-        TriggerServerEvent("server_sync_attachments:plyerJoined")
-    end)
-
-    Citizen.Wait(1000)
     
     SetEntityCoords(plyPed, spawnOverview.x, spawnOverview.y, spawnOverview.z)
 
     FreezeEntityPosition(plyPed, true)
+    SetEntityHeading(plyPed, 160)
     SetEntityVisible(plyPed, false)
     SetEntityInvincible(plyPed, true)
 
-    Citizen.Wait(3000)
-
-    DoScreenFadeIn(500)
-    TransitionToBlurred(500)
-
-    displayWelcomeMenu(true)
-
-    while isPlyerInSpawnMenu do
-        SetEntityHeading(plyPed, 160)
-
-        Citizen.Wait(1)
-    end
-end
-
---#[Citizen Threads]#--
-Citizen.CreateThread(function()
-    Citizen.Wait(500)
-
-    DoScreenFadeOut(1)
-    
     Citizen.Wait(2000)
 
+    displayBlackoutMenu(false)
+    TransitionToBlurred(500)
+    displayWelcomeMenu(true)
+end
+
+--#[Event Handlers]#--
+AddEventHandler("playerSpawned", function()
+    if not plyFirstJoin then
+        requestMap(true) --function from client script client_map_loader.lua
+        plyerJoined()
+
+        plyFirstJoin = true
+    end
+end)
+
+AddEventHandler("onClientResourceStart", function()
     if not plyFirstJoin then
         requestMap(true) --function from client script client_map_loader.lua
         plyerJoined()
@@ -181,8 +170,6 @@ end)
 RegisterNUICallback("spawnPlayer", function(data, cb)
     Citizen.CreateThread(function()
         spawnPlayer()
-
-        isPlyerInSpawnMenu = false
     end)
 
     cb("ok")

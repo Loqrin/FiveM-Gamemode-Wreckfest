@@ -34,11 +34,11 @@ local isRoundTimerOn = false
 local buildTime = 0
 local isBuildTimerOn = false
 
-local maxRoundTime = 600 --5min
-local maxBuildTime = 180 --3min
+--local maxRoundTime = 600 --5min
+--local maxBuildTime = 180 --3min
 
---local maxRoundTime = 600
---local maxBuildTime = 5
+local maxRoundTime = 600
+local maxBuildTime = 5
 
 --#[Local Functions]#--
 local function createTable(data)
@@ -378,10 +378,12 @@ function roundTimer(state)
         for k, v in pairs(allPlyers) do
             local id = GetPlayerIdentifiers(v)
 
-            plyersScoreboard["" .. id[1]].kills = 0
-            plyersScoreboard["" .. id[1]].deaths = 0
+            if plyersScoreboard["" .. id[1]] ~= nil then
+                plyersScoreboard["" .. id[1]].kills = 0
+                plyersScoreboard["" .. id[1]].deaths = 0
 
-            TriggerClientEvent("client_player:RoundTimerStarting", v, roundTime)
+                TriggerClientEvent("client_player:RoundTimerStarting", v, roundTime)
+            end
         end
 
         isRoundTimerOn = true
@@ -462,11 +464,9 @@ local function plyJoinedScoreboard(plySource)
     if isBuildTimerOn then
         --TriggerClientEvent("client_player:updateScoreboardTimer", plySource, true, buildTime)
         TriggerClientEvent("client_player:BuildTimerStarting", plySource, buildTime)
-        print("Build timer is on")
     elseif isRoundTimerOn then
         --TriggerClientEvent("client_player:updateScoreboardTimer", plySource, false, buildTime)
         TriggerClientEvent("client_player:RoundTimerStarting", plySource, roundTime)
-        print("Round timer is on")
     end
 end
 
