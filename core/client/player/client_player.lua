@@ -96,6 +96,8 @@ Citizen.CreateThread(function()
             DisableControlAction(1, keys.ScrollDown, true)
             DisableControlAction(1, keys.ScrollDown2, true)
             DisableControlAction(1, keys.Space, true)
+            DisableControlAction(1, keys.R2, true)
+            DisableControlAction(1, keys.Q3, true)
 
             if currentVehicle ~= nil then
                 SetVehicleDoorsLocked(currentVehicle, 2)

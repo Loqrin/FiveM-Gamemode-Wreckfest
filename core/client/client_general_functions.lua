@@ -7,7 +7,7 @@ Provides functions and variables generally used throughout the gamemode.
 --#[Global Variables]#--
 keys = {F5 = 166, UpArrow = 172, DownArrow = 173, LeftArrow = 174, RightArrow = 175, Enter = 176, Backspace = 177, MouseRight = 220, MouseDown = 221,
         W = 32, A = 34, S = 33, D = 35, Shift = 21, LeftCtrl = 210, MouseLeftClick = 24, MouseLeftClick2 = 106, C = 26, X = 73, Space = 22, ScrollUp = 15, ScrollDown = 14,
-        ScrollUp2 = 17, ScrollDown2 = 16, Tab = 37, E = 38, R = 45, R2 = 140, R3 = 80, Q = 44, Q2 = 85, Tab = 37}
+        ScrollUp2 = 17, ScrollDown2 = 16, Tab = 37, E = 38, R = 45, R2 = 140, R3 = 80, Q = 44, Q2 = 85, Q3 = 141, Tab = 37}
 
 --#[Global Functions]#--
 function CreateTable(data)
