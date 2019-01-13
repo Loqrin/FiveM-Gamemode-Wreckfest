@@ -67,6 +67,8 @@ local function retrievalComplete(vehicleData)
 
     Citizen.Wait(1000)
 
+    enableVehicleInvincibility = true --variable from client script client_player.lua
+
     if vehicleData.props ~= nil then
         for k, v in pairs(vehicleData.props) do
             local relativePos = vector3(tonumber(v.x), tonumber(v.y), tonumber(v.z))

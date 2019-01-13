@@ -48,6 +48,8 @@ local function purchaseComplete(charge, model, serverID)
     plyerData.money = charge
 
     spawnVehicle(true, model, plyerPlatformPos, 272.0, serverID) --function from client script client_sync_vehicles.lua
+    
+    enableVehicleInvincibility = true --variable from client script client_player.lua
 end
 
 --#[Citizen Threads]#--

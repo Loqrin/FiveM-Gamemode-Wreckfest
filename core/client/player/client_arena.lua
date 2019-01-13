@@ -24,7 +24,8 @@ Citizen.CreateThread(function()
                                     SetEntityCoords(currentVehicle, tonumber(v.x), tonumber(v.y), tonumber(v.z))
                                     SetEntityHeading(currentVehicle, tonumber(v.heading))
                                     FreezeEntityPosition(currentVehicle, false)
-                                    SetEntityInvincible(currentVehicle, false)
+                                    enableVehicleInvincibility = false --variable from client script client_player.lua
+                                    enablePlyInvincibility = false --variable from client script client_player.lua
 
                                     break
                                 end
@@ -52,9 +53,6 @@ Citizen.CreateThread(function()
 
         if isPlayerInArena then
             local plyPed = GetPlayerPed(-1)
-
-            SetEntityInvincible(currentVehicle, false)
-            SetEntityInvincible(plyPed, false)
 
             SetVehicleDoorsLocked(currentVehicle, 2)
             SetVehicleDoorsLocked(currentVehicle, 4)

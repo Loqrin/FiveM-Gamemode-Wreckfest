@@ -88,7 +88,9 @@ function spawnPlayer()
                 SetEntityCoords(currentVehicle, tonumber(v.x), tonumber(v.y), tonumber(v.z))
                 SetEntityHeading(currentVehicle, tonumber(v.heading))
                 FreezeEntityPosition(currentVehicle, false)
-                SetEntityInvincible(currentVehicle, false)
+                
+                enableVehicleInvincibility = false --variable from client script client_player.lua
+                enablePlyInvincibility = false --variable from client script client_player.lua
 
                 break
             end
@@ -101,12 +103,12 @@ function spawnPlayer()
 
         SetEntityCoords(plyPed, plyerPlatformPos.x, plyerPlatformPos.y, plyerPlatformPos.z + 4.0)
 
+        enablePlyInvincibility = true --variable from client script client_player.lua
         isPlayerInSpawn = true --variable from client script client_player.lua
     end
 
     FreezeEntityPosition(plyPed, false)
     SetEntityVisible(plyPed, true)
-    SetEntityInvincible(plyPed, false)
 
     TransitionFromBlurred(500)
     displayBlackoutMenu(false)
@@ -138,7 +140,8 @@ local function plyerJoined()
     FreezeEntityPosition(plyPed, true)
     SetEntityHeading(plyPed, 160)
     SetEntityVisible(plyPed, false)
-    SetEntityInvincible(plyPed, true)
+
+    enablePlyInvincibility = true --variable from client script client_player.lua
 
     Citizen.Wait(2000)
 

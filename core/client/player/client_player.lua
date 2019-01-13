@@ -13,6 +13,9 @@ isPlayerInArena = false
 isBuildTimerActive = false
 isRoundTimerActive = false
 
+enableVehicleInvincibility = false
+enablePlyInvincibility = false
+
 --#[Local Variables]#--
 local scoreboardPlyers = {}
 local isScoreboardDisplaying = false
@@ -94,10 +97,7 @@ Citizen.CreateThread(function()
             DisableControlAction(1, keys.ScrollDown2, true)
             DisableControlAction(1, keys.Space, true)
 
-            SetEntityInvincible(plyPed, true)
-
             if currentVehicle ~= nil then
-                SetEntityInvincible(currentVehicle, true)
                 SetVehicleDoorsLocked(currentVehicle, 2)
                 FreezeEntityPosition(currentVehicle, true)
             end
@@ -152,6 +152,17 @@ Citizen.CreateThread(function()
         end
 
         Citizen.Wait(100)
+    end
+end)
+
+Citizen.CreateThread(function()
+    while true do 
+        local plyPed = GetPlayerPed(-1)
+
+        SetEntityInvincible(currentVehicle, enableVehicleInvincibility)
+        SetEntityInvincible(plyPed, enablePlyInvincibility)
+
+        Citizen.Wait(1)
     end
 end)
 
