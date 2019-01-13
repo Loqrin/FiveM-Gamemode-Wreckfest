@@ -15,9 +15,6 @@ function spawnPlayer()
     local plyPed = GetPlayerPed(-1)
     local plyModelHash = GetHashKey(plyDefaultModel) --variable from client script config_client_player.lua
 
-    displayBlackoutMenu(true) --function from client script client_ui.lua
-    displayWelcomeMenu(false) --function from client script client_ui.lua
-
     RequestModel(plyModelHash)
     while not HasModelLoaded(plyModelHash) or not HasCollisionForModelLoaded(plyModelHash) do
         Citizen.Wait(1)
@@ -97,6 +94,9 @@ function spawnPlayer()
             end
         end
     else
+        displayBlackoutMenu(true) --function from client script client_ui.lua
+        displayWelcomeMenu(false) --function from client script client_ui.lua
+
         Citizen.Wait(2000)
 
         SetEntityCoords(plyPed, plyerPlatformPos.x, plyerPlatformPos.y, plyerPlatformPos.z + 4.0)
@@ -154,6 +154,13 @@ AddEventHandler("playerSpawned", function()
         plyerJoined()
 
         plyFirstJoin = true
+    else 
+        TriggerServerEvent("server_sync_player:updateScoreboard", GetPlayerName(plyID), false, true)
+        spawnPlayer()
+
+        Citizen.Wait(3000)
+
+        displayBlackoutMenu(false) --function from client script client_ui.lua  
     end
 end)
 

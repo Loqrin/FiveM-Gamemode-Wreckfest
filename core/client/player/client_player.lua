@@ -5,7 +5,6 @@ Functionality provided for the player.
 ]]
 
 --#[Global Variables]#--
-plyDead = false
 plyerData = {money = 0, vehicles = {}}
 
 isPlayerInSpawn = false
@@ -74,19 +73,7 @@ Citizen.CreateThread(function()
                         plyerDeath(i, otherPed)
 
                         if i == plyID then
-                            plyDead = true
-
-                            displayBlackoutMenu(true) --function from client script client_ui.lua
-                            Citizen.Wait(3000)
-
-                            spawnPlayer()
-                            TriggerServerEvent("server_sync_player:updateScoreboard", GetPlayerName(plyID), false, true)
-
-                            Citizen.Wait(1000)
-
-                            displayBlackoutMenu(false)
-
-                            plyDead = false
+                            displayBlackoutMenu(true) --function from client script client_ui.lua                            
                         end
 
                         deadPlyers[i] = true
