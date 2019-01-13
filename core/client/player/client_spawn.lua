@@ -157,15 +157,6 @@ AddEventHandler("playerSpawned", function()
     end
 end)
 
-AddEventHandler("onClientResourceStart", function()
-    if not plyFirstJoin then
-        requestMap(true) --function from client script client_map_loader.lua
-        plyerJoined()
-
-        plyFirstJoin = true
-    end
-end)
-
 RegisterNetEvent("client_spawn:resourceRestart")
 AddEventHandler("client_spawn:resourceRestart", function()
     if not plyFirstJoin then
