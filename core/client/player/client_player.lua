@@ -39,21 +39,21 @@ local function plyerDeath(otherID, otherPed)
     local plyID = PlayerId()
     local entity, weapon = NetworkGetEntityKillerOfPlayer(otherID)
     local otherName = GetPlayerName(otherID)
-    local deathMsg = "~y~" .. otherName .. " ~w~died."
+    local deathMsg = "~y~<C>" .. otherName .. "</C> ~w~died."
     
     if IsPedAPlayer(entity) then
         local killer = NetworkGetPlayerIndexFromPed(entity)
         local killerName = GetPlayerName(killer)
 
         if killerName == otherName then
-            deathMsg = "~y~" .. otherName .. " ~w~commited suicide."
+            deathMsg = "~y~<C>" .. otherName .. "</C> ~w~commited suicide."
         elseif killerName == GetPlayerName(plyID) then
-            deathMsg = "~y~You ~w~obliterated ~y~" .. otherName .. "~w~."
+            deathMsg = "~y~<C>You</C> ~w~obliterated ~y~<C>" .. otherName .. "</C>~w~."
 
             TriggerServerEvent("server_sync_player:updateScoreboard", GetPlayerName(plyID), true, false)
             TriggerServerEvent("server_sync_player:payment")
         else
-            deathMsg = "~y~" .. killerName .. " ~w~obliterated ~y~" .. otherName .. "~w~."
+            deathMsg = "~y~<C>" .. killerName .. "</C> ~w~obliterated ~y~<C>" .. otherName .. "</C>~w~."
         end
     end
 
