@@ -110,6 +110,9 @@ function spawnPlayer()
     FreezeEntityPosition(plyPed, false)
     SetEntityVisible(plyPed, true)
 
+    NetworkSetFriendlyFireOption(true)
+    SetCanAttackFriendly(plyPed, true, false)
+
     TransitionFromBlurred(500)
     displayBlackoutMenu(false)
 end
