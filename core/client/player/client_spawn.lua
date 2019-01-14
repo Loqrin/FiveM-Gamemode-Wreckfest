@@ -45,7 +45,7 @@ function spawnPlayer()
         unsyncVehicle(currentVehicleServerID) --function from client script client_sync_vehicles.lua
         DeleteVehicle(currentVehicle)
 
-        Citizen.Wait(500)
+        Citizen.Wait(2000)
 
         --variable currentVehicleData from client script client_terminal_garage.lua
         spawnVehicle(true, currentVehicleData.vehicle, pos, 272.64904785156, currentVehicleData.id) --function from client script client_sync_vehicles.lua

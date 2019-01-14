@@ -161,8 +161,8 @@ Citizen.CreateThread(function()
     while true do 
         local plyPed = GetPlayerPed(-1)
 
-        SetEntityInvincible(currentVehicle, enableVehicleInvincibility)
-        SetEntityInvincible(plyPed, enablePlyInvincibility)
+        --SetEntityInvincible(currentVehicle, enableVehicleInvincibility)
+        --SetEntityInvincible(plyPed, enablePlyInvincibility)
 
         Citizen.Wait(1)
     end
