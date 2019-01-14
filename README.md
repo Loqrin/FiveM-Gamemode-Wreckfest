@@ -6,3 +6,6 @@ The two files:
 - wreckfest_spawn_v1.0.0_covered.xml
 
 Need to be placed where the server.cfg is, outside of the resources folder.
+
+The resource MUST be called:
+loqscript_wreckfest_gamemode
